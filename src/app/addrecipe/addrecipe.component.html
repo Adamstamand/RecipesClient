@@ -1,0 +1,50 @@
+<h1>Add a New Recipe!</h1>
+<form [formGroup]="recipeForm" (ngSubmit)="postRecipe()">
+    <section>
+        <div>
+            <label for="recipeName">Name: </label>
+            <input id="recipeName" type="text" formControlName="name">
+        </div>
+
+        <div>
+            <label for="recipeName">Time To Prepare: </label>
+            <input id="recipeName" type="text" formControlName="timeToPrepare">
+        </div>
+
+        <div>
+            <label for="recipeName">Description: {{recipeForm.controls['description'].value}}</label>
+            <input id="recipeName" type="text" formControlName="description">
+        </div>
+
+        <div>
+            <label for="recipeName">Photo: {{recipeForm.controls['photo'].value}}</label>
+            <input id="recipeName" type="text" formControlName="photo">
+        </div>
+    </section>
+
+    <section>
+        <div>
+            <label for="recipeName">Add Ingredient: </label>
+            <input id="recipeName" type="text" formControlName="ingredients">
+            <button type="button" (click)="addIngredient()">Add Ingredient</button>
+        </div>
+        <ul>
+            <li *ngFor="let ingredient of ingredients">{{ingredient}}</li>
+        </ul>
+    </section>
+
+    <section>
+        <div>
+            <label for="recipeName">Add Instruction: </label>
+            <input id="recipeName" type="text" formControlName="instructions">
+            <button type="button" (click)="addInstruction()">Add Instruction</button>
+        </div>
+        <ol>
+            <li *ngFor="let instruction of instructions">{{instruction}}</li>
+        </ol>
+    </section>
+
+    <button type="submit" [disabled]="!recipeForm.valid || 
+    instructions.length < 1 || 
+    ingredients.length < 1">Submit</button>
+</form>
