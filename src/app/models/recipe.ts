@@ -1,15 +1,18 @@
+import { Ingredient } from "./ingredient";
+import { Instruction } from "./instruction";
+
 export class Recipe {
     name: string;
     description: string;
-    instructions: string[];
-    ingredients: string[];
+    instructions: Instruction[];
+    ingredients: Ingredient[];
     timeToPrepare: number;
     photo: string;
 
     constructor(name: string, timeToPrepare: number,
-        ingredients: string[],
+        ingredients: Ingredient[],
         description: string,
-        instructions: string[],
+        instructions: Instruction[],
         photo: string) {
 
         this.name = name;
@@ -19,4 +22,14 @@ export class Recipe {
         this.timeToPrepare = timeToPrepare;
         this.photo = photo;
     }
+}
+
+export interface RecipeFromDB {
+    recipeId: number;
+    name: string;
+    description: string;
+    instructions: Instruction[];
+    ingredients: Ingredient[];
+    timeToPrepare: number;
+    photo: string;
 }

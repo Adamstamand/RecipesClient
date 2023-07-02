@@ -1,3 +1,17 @@
 .food-image {
-    height: 50vh;
+    max-height: 70%;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-gap: 30px;
+    margin-bottom: 10px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.recipe-container {
+    height: 400px
 }

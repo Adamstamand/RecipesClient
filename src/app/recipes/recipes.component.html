@@ -1,9 +1,11 @@
-<ul *ngFor="let recipe of recipes">
-    <li>{{recipe.name}}</li>
-    <li>{{recipe.timeToPrepare}} Minutes Preparation</li>
-    <li><img class="food-image" src={{recipe.photo}} /></li>
-    <li>{{recipe.ingredients}}</li>
-    <li>{{recipe.description}}</li>
-    <li>{{recipe.instructions}}</li>
-</ul>
+<section class="container">
+    <div class="recipe-container" *ngFor="let recipe of recipes">
+        <a [routerLink]="['/recipe/', recipe.recipeId]">
+            <h1>{{recipe.name}}</h1>
+        </a>
+        <p>{{recipe.timeToPrepare}} Minutes Preparation</p>
+        <img class="food-image" src={{recipe.photo}} />
+
+    </div>
+</section>
 <button (click)="whatsTheRecipe()">Click Me</button>

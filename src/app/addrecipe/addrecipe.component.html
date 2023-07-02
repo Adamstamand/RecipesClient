@@ -12,13 +12,13 @@
         </div>
 
         <div>
-            <label for="recipeName">Description: {{recipeForm.controls['description'].value}}</label>
+            <label for="recipeName">Description: </label>
             <input id="recipeName" type="text" formControlName="description">
         </div>
 
         <div>
-            <label for="recipeName">Photo: {{recipeForm.controls['photo'].value}}</label>
-            <input id="recipeName" type="text" formControlName="photo">
+            <label for="recipeName">Photo (Unsplash image url): </label>
+            <input id="recipeName" type="text" formControlName="photo" placeholder="https://images.unsplash.com">
         </div>
     </section>
 
@@ -40,7 +40,7 @@
             <button type="button" (click)="addInstruction()">Add Instruction</button>
         </div>
         <ol>
-            <li *ngFor="let instruction of instructions">{{instruction}}</li>
+            <li *ngFor="let instruction of instructions">{{instruction.words}}</li>
         </ol>
     </section>
 

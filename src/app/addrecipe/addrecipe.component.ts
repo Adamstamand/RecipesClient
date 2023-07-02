@@ -3,6 +3,8 @@ import { FormBuilder, Validators } from '@angular/forms';
 
 import { RecipeService } from '../services/recipe.service';
 import { Recipe } from '../models/recipe';
+import { Instruction } from '../models/instruction';
+import { Ingredient } from '../models/ingredient';
 
 @Component({
   selector: 'app-addrecipe',
@@ -16,12 +18,12 @@ export class AddrecipeComponent {
     ingredients: [''],
     description: ['', Validators.required],
     instructions: [''],
-    photo: [''],
+    photo: ['', [Validators.required, Validators.pattern("^https:\/\/images\.unsplash\.com\/.*")]],
   });
 
   recipe?: Recipe;
-  ingredients: string[] = [];
-  instructions: string[] = [];
+  ingredients: Ingredient[] = [];
+  instructions: Instruction[] = [];
 
   constructor(private recipeService: RecipeService, private formbuilder: FormBuilder) { };
 
@@ -29,9 +31,10 @@ export class AddrecipeComponent {
 
   addIngredient() {
     if (this.recipeForm.controls['ingredients'].value !== null
-      && !this.ingredients.includes(this.recipeForm.controls['ingredients'].value)
+      // && !this.ingredients.includes(this.recipeForm.controls['ingredients'].value)
     ) {
-      this.ingredients.push(this.recipeForm.controls['ingredients'].value);
+      let newIngredient = new Ingredient(this.recipeForm.controls['ingredients'].value);
+      this.ingredients.push(newIngredient);
       this.recipeForm.controls['ingredients'].reset();
     }
     console.log(this.ingredients);
@@ -39,20 +42,21 @@ export class AddrecipeComponent {
 
   addInstruction() {
     if (this.recipeForm.controls['instructions'].value !== null
-      && !this.instructions.includes(this.recipeForm.controls['instructions'].value)
+      //&& !this.instructions.includes(this.recipeForm.controls['instructions'].value)
     ) {
-      this.instructions.push(this.recipeForm.controls['instructions'].value);
+      let newInstruction = new Instruction(this.recipeForm.controls['instructions'].value, this.instructions.length);
+      this.instructions.push(newInstruction);
       this.recipeForm.controls['instructions'].reset();
     }
-    console.log(this.ingredients);
+    console.log(this.instructions);
   }
 
   postRecipe() {
     this.recipe = new Recipe(this.getRecipeValue('name'),
       this.getRecipeValue('timeToPrepare'),
-      this.getRecipeValue('ingredients'),
+      this.ingredients,
       this.getRecipeValue('description'),
-      this.getRecipeValue('instructions'),
+      this.instructions,
       this.getRecipeValue('photo'),
     );
     console.log(this.recipe);
