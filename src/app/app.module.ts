@@ -9,6 +9,8 @@ import { RecipesComponent } from './recipes/recipes.component';
 import { AddrecipeComponent } from './addrecipe/addrecipe.component';
 import { RecipeComponent } from './recipe/recipe.component';
 import { FourohfourComponent } from './fourohfour/fourohfour.component';
+import { NavbarComponent } from './navbar/navbar.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +18,9 @@ import { FourohfourComponent } from './fourohfour/fourohfour.component';
     RecipesComponent,
     AddrecipeComponent,
     RecipeComponent,
-    FourohfourComponent
+    FourohfourComponent,
+    NavbarComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

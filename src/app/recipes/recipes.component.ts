@@ -14,12 +14,13 @@ export class RecipesComponent implements OnInit {
   constructor(private recipeService: RecipeService) { }
 
   whatsTheRecipe() {
-    inject(Router).navigate(['/not-found']);
-    console.log('clicked');
+    console.log(this.recipes);
   }
+
   ngOnInit() {
     this.getRecipe();
   }
+
   getRecipe() {
     this.recipeService.getRecipe().subscribe(recipes => this.recipes = recipes);
   }

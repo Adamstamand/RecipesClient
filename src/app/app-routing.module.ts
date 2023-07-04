@@ -6,12 +6,16 @@ import { AddrecipeComponent } from './addrecipe/addrecipe.component';
 import { RecipeComponent } from './recipe/recipe.component';
 import { FourohfourComponent } from './fourohfour/fourohfour.component';
 import { recipeResolver } from './resolvers/recipe.resolver';
+import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
   { path: 'recipe/:id', component: RecipeComponent, resolve: { resolvedRecipe: recipeResolver } },
   { path: 'not-found', component: FourohfourComponent },
   { path: 'recipes', component: RecipesComponent },
-  { path: 'addrecipe', component: AddrecipeComponent },
+  { path: 'add-recipe', component: AddrecipeComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: '', component: RecipesComponent },
+  { path: '**', component: FourohfourComponent },
 ];
 
 @NgModule({

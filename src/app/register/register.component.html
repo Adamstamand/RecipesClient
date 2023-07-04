@@ -1,0 +1,20 @@
+<div>
+    <form [formGroup]="registerForm" (ngSubmit)="registerSubmitted()">
+        <div>
+            <label for="email">Email:</label>
+            <input type="text" id="email" formControlName="email">
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="text" id="password" formControlName="password">
+        </div>
+        <div>
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="text" id="confirmPassword" formControlName="confirmPassword">
+        </div>
+        <button type="submit">Register</button>
+        <span *ngIf="(isFormSubmitted) && (registerForm.controls['confirmPassword'].errors?.['compareValidator'])">
+            Failed
+        </span>
+    </form>
+</div>
