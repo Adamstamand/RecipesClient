@@ -1,5 +1,5 @@
 <h1>Add a New Recipe!</h1>
-<form [formGroup]="recipeForm" (ngSubmit)="postRecipe()">
+<form [formGroup]="recipeForm" (ngSubmit)="submitRecipe()">
     <section>
         <div>
             <label for="recipeName">Name: </label>
@@ -7,25 +7,25 @@
         </div>
 
         <div>
-            <label for="recipeName">Time To Prepare: </label>
-            <input id="recipeName" type="text" formControlName="timeToPrepare">
+            <label for="timeToPrepare">Time To Prepare: </label>
+            <input id="timeToPrepare" type="text" formControlName="timeToPrepare">
         </div>
 
         <div>
-            <label for="recipeName">Description: </label>
-            <input id="recipeName" type="text" formControlName="description">
+            <label for="description">Description: </label>
+            <input id="description" type="text" formControlName="description">
         </div>
 
         <div>
-            <label for="recipeName">Photo (Unsplash image url): </label>
-            <input id="recipeName" type="text" formControlName="photo" placeholder="https://images.unsplash.com">
+            <label for="photo">Photo (Unsplash image url): </label>
+            <input id="photo" type="text" formControlName="photo" placeholder="https://images.unsplash.com">
         </div>
     </section>
 
     <section>
         <div>
-            <label for="recipeName">Add Ingredient: </label>
-            <input id="recipeName" type="text" formControlName="ingredients">
+            <label for="ingredients">Add Ingredient: </label>
+            <input id="ingredients" type="text" formControlName="ingredients">
             <button type="button" (click)="addIngredient()">Add Ingredient</button>
         </div>
         <ul>
@@ -35,8 +35,8 @@
 
     <section>
         <div>
-            <label for="recipeName">Add Instruction: </label>
-            <input id="recipeName" type="text" formControlName="instructions">
+            <label for="instructions">Add Instruction: </label>
+            <input id="instructions" type="text" formControlName="instructions">
             <button type="button" (click)="addInstruction()">Add Instruction</button>
         </div>
         <ol>

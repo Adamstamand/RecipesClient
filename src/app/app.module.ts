@@ -5,12 +5,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { RecipesComponent } from './recipes/recipes.component';
-import { AddrecipeComponent } from './addrecipe/addrecipe.component';
-import { RecipeComponent } from './recipe/recipe.component';
-import { FourohfourComponent } from './fourohfour/fourohfour.component';
-import { NavbarComponent } from './navbar/navbar.component';
-import { RegisterComponent } from './register/register.component';
+import { RecipesComponent } from './components/recipes/recipes.component';
+import { AddrecipeComponent } from './components/addrecipe/addrecipe.component';
+import { RecipeComponent } from './components/recipe/recipe.component';
+import { FourohfourComponent } from './components/fourohfour/fourohfour.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { RegisterComponent } from './components/register/register.component';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { RegisterComponent } from './register/register.component';
     RecipeComponent,
     FourohfourComponent,
     NavbarComponent,
-    RegisterComponent
+    RegisterComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

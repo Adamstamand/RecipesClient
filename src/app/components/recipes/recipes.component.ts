@@ -1,7 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 
-import { RecipeService } from '../services/recipe.service';
-import { Recipe, RecipeFromDB } from '../models/recipe';
+import { RecipeService } from '../../services/recipe.service';
+import { Recipe, RecipeFromDB } from '../../models/recipe';
 import { Router } from '@angular/router';
 
 @Component({
@@ -22,6 +22,10 @@ export class RecipesComponent implements OnInit {
   }
 
   getRecipe() {
-    this.recipeService.getRecipe().subscribe(recipes => this.recipes = recipes);
+    this.recipeService.getRecipe().subscribe({
+      next: recipes => this.recipes = recipes,
+      error: error => console.log(error)
+    });
+
   }
 }

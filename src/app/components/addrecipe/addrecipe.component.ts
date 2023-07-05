@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
-
-import { RecipeService } from '../services/recipe.service';
-import { Recipe } from '../models/recipe';
-import { Instruction } from '../models/instruction';
-import { Ingredient } from '../models/ingredient';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { RecipeService } from '../../services/recipe.service';
+import { Recipe } from '../../models/recipe';
+import { Instruction } from '../../models/instruction';
+import { Ingredient } from '../../models/ingredient';
 
 @Component({
   selector: 'app-addrecipe',
@@ -12,7 +11,7 @@ import { Ingredient } from '../models/ingredient';
   styleUrls: ['./addrecipe.component.css']
 })
 export class AddrecipeComponent {
-  recipeForm = this.formbuilder.group({
+  recipeForm: FormGroup = this.formbuilder.group({
     name: ['', Validators.required],
     timeToPrepare: ['', Validators.required],
     ingredients: [''],
@@ -26,8 +25,6 @@ export class AddrecipeComponent {
   instructions: Instruction[] = [];
 
   constructor(private recipeService: RecipeService, private formbuilder: FormBuilder) { };
-
-
 
   addIngredient() {
     if (this.recipeForm.controls['ingredients'].value !== null
@@ -51,7 +48,7 @@ export class AddrecipeComponent {
     console.log(this.instructions);
   }
 
-  postRecipe() {
+  submitRecipe() {
     this.recipe = new Recipe(this.getRecipeValue('name'),
       this.getRecipeValue('timeToPrepare'),
       this.ingredients,
@@ -60,7 +57,7 @@ export class AddrecipeComponent {
       this.getRecipeValue('photo'),
     );
     console.log(this.recipe);
-    this.recipeService.addRecipe(this.recipe).subscribe();
+    this.recipeService.postRecipe(this.recipe).subscribe();
   }
 
   private getRecipeValue(control: string) {
