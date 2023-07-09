@@ -1,4 +1,4 @@
-<section class="container">
+<section class="container" *ngIf="recipe != null">
     <div class="recipe-container">
         <h1>{{recipe.name}}</h1>
         <p>{{recipe.timeToPrepare}} Minutes Preparation</p>

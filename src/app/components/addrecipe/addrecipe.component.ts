@@ -4,6 +4,11 @@ import { RecipeService } from '../../services/recipe.service';
 import { Recipe } from '../../models/recipe';
 import { Instruction } from '../../models/instruction';
 import { Ingredient } from '../../models/ingredient';
+import { AccountService } from 'src/app/services/account.service';
+import { AddRecipe } from 'src/app/models/addRecipe';
+import { RefreshToken } from 'src/app/models/refreshToken';
+import { Router } from '@angular/router';
+import { RecipeFromDb } from 'src/app/models/recipeFromDb';
 
 @Component({
   selector: 'app-addrecipe',
@@ -11,6 +16,10 @@ import { Ingredient } from '../../models/ingredient';
   styleUrls: ['./addrecipe.component.css']
 })
 export class AddrecipeComponent {
+  recipe!: Recipe;
+  ingredients: Ingredient[] = [];
+  instructions: Instruction[] = [];
+
   recipeForm: FormGroup = this.formbuilder.group({
     name: ['', Validators.required],
     timeToPrepare: ['', Validators.required],
@@ -20,11 +29,8 @@ export class AddrecipeComponent {
     photo: ['', [Validators.required, Validators.pattern("^https:\/\/images\.unsplash\.com\/.*")]],
   });
 
-  recipe?: Recipe;
-  ingredients: Ingredient[] = [];
-  instructions: Instruction[] = [];
-
-  constructor(private recipeService: RecipeService, private formbuilder: FormBuilder) { };
+  constructor(private recipeService: RecipeService, private formbuilder: FormBuilder,
+    private accountService: AccountService, private route: Router) { };
 
   addIngredient() {
     if (this.recipeForm.controls['ingredients'].value !== null
@@ -56,8 +62,26 @@ export class AddrecipeComponent {
       this.instructions,
       this.getRecipeValue('photo'),
     );
-    console.log(this.recipe);
-    this.recipeService.postRecipe(this.recipe).subscribe();
+
+    this.accountService.postNewToken().subscribe({
+      next: newToken => {
+        let tokenRequest: RefreshToken = {
+          token: localStorage['token'] = newToken.token,
+          refreshToken: localStorage['refreshToken'] = newToken.refreshToken
+        };
+        let addRecipe: AddRecipe = {
+          token: tokenRequest,
+          recipe: this.recipe
+        };
+        this.recipeService.postRecipe(addRecipe).subscribe({
+          next: (value: RecipeFromDb) => {
+            console.log(value);
+            this.route.navigate([`/recipe/${value.recipeId}`]);
+          }
+        });
+      },
+      error: err => console.error('Error subbmitting recipe:', err)
+    });
   }
 
   private getRecipeValue(control: string) {

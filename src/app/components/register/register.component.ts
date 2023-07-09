@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 import { AccountService } from '../../services/account.service';
-import { RegisterUser } from '../../models/register-user';
 import { CompareValidation } from '../../validators/passwordValidator';
 
 @Component({
@@ -33,12 +32,13 @@ export class RegisterComponent {
       next: (response: any) => {
         console.log(response);
         this.isFormSubmitted = false;
-        sessionStorage["token"] = response.token;
-        sessionStorage["refreshToken"] = response.refreshToken;
+        localStorage["token"] = response.token;
+        localStorage["refreshToken"] = response.refreshToken;
+        this.accountService.isLoggedIn = true;
         this.router.navigate(['/add-recipe']);
       },
-      error: (error) => {
-        console.log(error);
+      error: (err) => {
+        console.log(err);
       }
     });
   }

@@ -23,13 +23,3 @@ export class Recipe {
         this.photo = photo;
     }
 }
-
-export interface RecipeFromDB {
-    recipeId: number;
-    name: string;
-    description: string;
-    instructions: Instruction[];
-    ingredients: Ingredient[];
-    timeToPrepare: number;
-    photo: string;
-}

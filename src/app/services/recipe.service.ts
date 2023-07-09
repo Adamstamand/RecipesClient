@@ -1,33 +1,45 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
-import { Recipe, RecipeFromDB } from '../models/recipe';
+import { AddRecipe } from '../models/addRecipe';
+import { RecipeFromDb } from '../models/recipeFromDb';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecipeService {
   private recipeUrl = 'https://localhost:7041/api/recipe';
-  private httpOptions = {
-    headers: new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${sessionStorage['token']}`
-    })
-  };
 
   constructor(private httpClient: HttpClient) { }
 
   getRecipe() {
-    return this.httpClient.get<RecipeFromDB[]>(this.recipeUrl, this.httpOptions);
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `bearer ${localStorage['token']}`
+      })
+    };
+    return this.httpClient.get<RecipeFromDb[]>(this.recipeUrl, httpOptions);
   }
 
   getSpecificRecipe(id: number) {
-    return this.httpClient.get<RecipeFromDB>(`${this.recipeUrl}/${id}`, this.httpOptions);
-  }
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `bearer ${localStorage['token']}`
+      })
+    };
+    return this.httpClient.get<RecipeFromDb>(`${this.recipeUrl}/${id}`, httpOptions);
+  };
 
-  postRecipe(recipe: Recipe): Observable<Recipe> {
-    return this.httpClient.post<Recipe>(this.recipeUrl, recipe, this.httpOptions);
+  postRecipe(recipe: AddRecipe): Observable<RecipeFromDb> {
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `bearer ${localStorage['token']}`
+      })
+    };
+    return this.httpClient.post<RecipeFromDb>(this.recipeUrl, recipe, httpOptions);
   }
 }

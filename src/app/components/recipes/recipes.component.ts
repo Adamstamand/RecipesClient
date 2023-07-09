@@ -1,8 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 
 import { RecipeService } from '../../services/recipe.service';
-import { Recipe, RecipeFromDB } from '../../models/recipe';
-import { Router } from '@angular/router';
+import { RecipeFromDb } from 'src/app/models/recipeFromDb';
 
 @Component({
   selector: 'app-recipes',
@@ -10,11 +9,12 @@ import { Router } from '@angular/router';
   styleUrls: ['./recipes.component.css']
 })
 export class RecipesComponent implements OnInit {
-  recipes?: RecipeFromDB[];
+  recipes?: RecipeFromDb[];
   constructor(private recipeService: RecipeService) { }
 
   whatsTheRecipe() {
     console.log(this.recipes);
+    console.log(localStorage['token']);
   }
 
   ngOnInit() {

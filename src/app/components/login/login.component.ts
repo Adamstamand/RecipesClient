@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { LogIn } from 'src/app/models/login';
 import { AccountService } from 'src/app/services/account.service';
 import { Router } from '@angular/router';
+import { AuthenticationResponse } from 'src/app/models/authenticationResponse';
 
 @Component({
   selector: 'app-login',
@@ -25,12 +25,14 @@ export class LoginComponent {
     console.log(this.logInForm.value);
 
     this.accountService.postLogIn(this.logInForm.value).subscribe({
-      next: (response: any) => {
+      next: (response: AuthenticationResponse) => {
         console.log(response);
         this.isFormSubmitted = false;
 
-        sessionStorage["token"] = response.token;
-        sessionStorage["refreshToken"] = response.refreshToken;
+        localStorage["token"] = response.token;
+        localStorage["refreshToken"] = response.refreshToken;
+
+        this.accountService.isLoggedIn = true;
 
         this.router.navigate(['/add-recipe']);
       },

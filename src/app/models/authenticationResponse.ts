@@ -1,3 +1,7 @@
 export interface AuthenticationResponse {
-    userName: string;
+    userName: string,
+    token: string,
+    expiration: Date,
+    refreshToken: string,
+    refreshTokenExpiration: Date,
 }
