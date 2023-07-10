@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs';
 
 import { RecipeFromDb } from 'src/app/models/recipeFromDb';
+import { AccountService } from 'src/app/services/account.service';
 import { RecipeService } from 'src/app/services/recipe.service';
 
 @Component({
@@ -13,7 +14,8 @@ import { RecipeService } from 'src/app/services/recipe.service';
 export class RecipeComponent {
   recipe?: RecipeFromDb;
 
-  constructor(private activatedRoute: ActivatedRoute, private recipeService: RecipeService, private route: Router) { }
+  constructor(private activatedRoute: ActivatedRoute, private recipeService: RecipeService, private route: Router,
+    private accountService: AccountService) { }
 
   ngOnInit() {
     this.activatedRoute.paramMap.pipe(
@@ -28,10 +30,11 @@ export class RecipeComponent {
           this.route.navigate(['not-found']);
         }
       });
+    this.accountService.refreshTokenOnlyIfTokenCurrentlyExists();
   }
 
   whatsTheRecipe() {
     console.log(this.recipe);
   }
-}
 
+}

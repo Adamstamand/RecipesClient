@@ -20,6 +20,14 @@
             <label for="photo">Photo (Unsplash image url): </label>
             <input id="photo" type="text" formControlName="photo" placeholder="https://images.unsplash.com">
         </div>
+        <h1>{{recipeForm.get('privacy')?.value}}</h1>
+        <div>
+            <label for="privacy">Public or Private?</label>
+            <select name="privacy" id="privacy" formControlName="privacy">
+                <option value="public">Public</option>
+                <option value="private">Private</option>
+            </select>
+        </div>
     </section>
 
     <section>
@@ -29,7 +37,7 @@
             <button type="button" (click)="addIngredient()">Add Ingredient</button>
         </div>
         <ul>
-            <li *ngFor="let ingredient of ingredients">{{ingredient}}</li>
+            <li *ngFor="let ingredient of ingredients">{{ingredient.words}}</li>
         </ul>
     </section>
 
@@ -43,6 +51,8 @@
             <li *ngFor="let instruction of instructions">{{instruction.words}}</li>
         </ol>
     </section>
+
+
 
     <button type="submit" [disabled]="!recipeForm.valid || 
     instructions.length < 1 || 

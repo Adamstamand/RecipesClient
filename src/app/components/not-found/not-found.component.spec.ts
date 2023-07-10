@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FourohfourComponent } from './fourohfour.component';
+import { NotFoundComponent } from './not-found.component';
 
 describe('FourohfourComponent', () => {
-  let component: FourohfourComponent;
-  let fixture: ComponentFixture<FourohfourComponent>;
+  let component: NotFoundComponent;
+  let fixture: ComponentFixture<NotFoundComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [FourohfourComponent]
+      declarations: [NotFoundComponent]
     });
-    fixture = TestBed.createComponent(FourohfourComponent);
+    fixture = TestBed.createComponent(NotFoundComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

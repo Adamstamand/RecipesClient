@@ -4,20 +4,20 @@ import { RouterModule, Routes } from '@angular/router';
 import { RecipesComponent } from './components/recipes/recipes.component';
 import { AddrecipeComponent } from './components/addrecipe/addrecipe.component';
 import { RecipeComponent } from './components/recipe/recipe.component';
-import { FourohfourComponent } from './components/fourohfour/fourohfour.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { authenticationGuard } from './guards/authentication.guard';
 
 const routes: Routes = [
-  { path: 'recipe/:id', component: RecipeComponent, canActivate: [authenticationGuard] },
-  { path: 'not-found', component: FourohfourComponent },
+  { path: 'recipe/:id', component: RecipeComponent },
+  { path: 'not-found', component: NotFoundComponent },
   { path: 'recipes', component: RecipesComponent },
   { path: 'add-recipe', component: AddrecipeComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'log-in', component: LoginComponent },
   { path: '', component: RecipesComponent },
-  { path: '**', component: FourohfourComponent },
+  { path: '**', component: NotFoundComponent },
 ];
 
 @NgModule({

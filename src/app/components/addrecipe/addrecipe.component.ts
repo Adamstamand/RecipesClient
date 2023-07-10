@@ -24,6 +24,7 @@ export class AddrecipeComponent {
     name: ['', Validators.required],
     timeToPrepare: ['', Validators.required],
     ingredients: [''],
+    privacy: ['public', Validators.required],
     description: ['', Validators.required],
     instructions: [''],
     photo: ['', [Validators.required, Validators.pattern("^https:\/\/images\.unsplash\.com\/.*")]],
@@ -34,7 +35,7 @@ export class AddrecipeComponent {
 
   addIngredient() {
     if (this.recipeForm.controls['ingredients'].value !== null
-      // && !this.ingredients.includes(this.recipeForm.controls['ingredients'].value)
+      && !this.ingredients.some(value => value.words == this.recipeForm.controls['ingredients'].value)
     ) {
       let newIngredient = new Ingredient(this.recipeForm.controls['ingredients'].value);
       this.ingredients.push(newIngredient);
@@ -45,13 +46,19 @@ export class AddrecipeComponent {
 
   addInstruction() {
     if (this.recipeForm.controls['instructions'].value !== null
-      //&& !this.instructions.includes(this.recipeForm.controls['instructions'].value)
+      && !this.instructions.some(value => value.words == this.recipeForm.controls['instructions'].value)
     ) {
       let newInstruction = new Instruction(this.recipeForm.controls['instructions'].value, this.instructions.length);
       this.instructions.push(newInstruction);
       this.recipeForm.controls['instructions'].reset();
     }
     console.log(this.instructions);
+  }
+
+  removeValue<T>(valueArray: T[], value: T) {
+    const index = valueArray.indexOf(value);
+    valueArray.splice(index, 1);
+
   }
 
   submitRecipe() {
@@ -61,18 +68,24 @@ export class AddrecipeComponent {
       this.getRecipeValue('description'),
       this.instructions,
       this.getRecipeValue('photo'),
+      this.getRecipeValue('privacy')
     );
 
     this.accountService.postNewToken().subscribe({
       next: newToken => {
+        localStorage['token'] = newToken.token;
+        localStorage['refreshToken'] = newToken.refreshToken;
+
         let tokenRequest: RefreshToken = {
-          token: localStorage['token'] = newToken.token,
-          refreshToken: localStorage['refreshToken'] = newToken.refreshToken
+          token: newToken.token,
+          refreshToken: newToken.refreshToken
         };
+
         let addRecipe: AddRecipe = {
           token: tokenRequest,
           recipe: this.recipe
         };
+
         this.recipeService.postRecipe(addRecipe).subscribe({
           next: (value: RecipeFromDb) => {
             console.log(value);
@@ -80,7 +93,7 @@ export class AddrecipeComponent {
           }
         });
       },
-      error: err => console.error('Error subbmitting recipe:', err)
+      error: err => console.error('Error submitting recipe:', err)
     });
   }
 

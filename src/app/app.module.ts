@@ -8,11 +8,12 @@ import { AppComponent } from './app.component';
 import { RecipesComponent } from './components/recipes/recipes.component';
 import { AddrecipeComponent } from './components/addrecipe/addrecipe.component';
 import { RecipeComponent } from './components/recipe/recipe.component';
-import { FourohfourComponent } from './components/fourohfour/fourohfour.component';
+import { NotFoundComponent } from './components/not-found/not-found.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -20,11 +21,12 @@ import { LogoutComponent } from './components/logout/logout.component';
     RecipesComponent,
     AddrecipeComponent,
     RecipeComponent,
-    FourohfourComponent,
+    NotFoundComponent,
     NavbarComponent,
     RegisterComponent,
     LoginComponent,
-    LogoutComponent
+    LogoutComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,

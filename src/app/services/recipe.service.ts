@@ -13,7 +13,7 @@ export class RecipeService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getRecipe() {
+  getAllRecipes() {
     let httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',

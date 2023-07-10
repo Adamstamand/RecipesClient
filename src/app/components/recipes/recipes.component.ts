@@ -1,7 +1,8 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 import { RecipeService } from '../../services/recipe.service';
 import { RecipeFromDb } from 'src/app/models/recipeFromDb';
+import { AccountService } from 'src/app/services/account.service';
 
 @Component({
   selector: 'app-recipes',
@@ -10,7 +11,7 @@ import { RecipeFromDb } from 'src/app/models/recipeFromDb';
 })
 export class RecipesComponent implements OnInit {
   recipes?: RecipeFromDb[];
-  constructor(private recipeService: RecipeService) { }
+  constructor(private recipeService: RecipeService, private accountService: AccountService) { }
 
   whatsTheRecipe() {
     console.log(this.recipes);
@@ -18,11 +19,13 @@ export class RecipesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getRecipe();
+    this.getRecipes();
+
+    this.accountService.refreshTokenOnlyIfTokenCurrentlyExists();
   }
 
-  getRecipe() {
-    this.recipeService.getRecipe().subscribe({
+  getRecipes() {
+    this.recipeService.getAllRecipes().subscribe({
       next: recipes => this.recipes = recipes,
       error: error => console.log(error)
     });

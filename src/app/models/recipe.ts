@@ -8,12 +8,14 @@ export class Recipe {
     ingredients: Ingredient[];
     timeToPrepare: number;
     photo: string;
+    privacy: string;
 
     constructor(name: string, timeToPrepare: number,
         ingredients: Ingredient[],
         description: string,
         instructions: Instruction[],
-        photo: string) {
+        photo: string,
+        privacy: string) {
 
         this.name = name;
         this.description = description;
@@ -21,5 +23,6 @@ export class Recipe {
         this.ingredients = ingredients;
         this.timeToPrepare = timeToPrepare;
         this.photo = photo;
+        this.privacy = privacy;
     }
 }

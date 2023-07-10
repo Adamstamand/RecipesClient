@@ -33,7 +33,22 @@ export class AccountService {
       token: token,
       refreshToken: refreshToken
     };
-
     return this.httpClient.post<RefreshToken>(`${this.baseApiUrl}/new-token`, newToken);
+  }
+
+  refreshTokenOnlyIfTokenCurrentlyExists() {
+    if (localStorage["token"] != undefined && localStorage["refreshToken"] != undefined) {
+      this.postNewToken().subscribe({
+        next: (newToken: RefreshToken) => {
+          this.isLoggedIn = true;
+          localStorage["token"] = newToken.token;
+          localStorage["refreshToken"] = newToken.refreshToken;
+        },
+        error: err => {
+          console.error(err);
+          this.isLoggedIn = false;
+        }
+      });
+    }
   }
 }

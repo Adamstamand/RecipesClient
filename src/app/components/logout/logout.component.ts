@@ -14,7 +14,9 @@ export class LogoutComponent {
   logOut() {
     localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");
-    this.accountService.getLogOut().subscribe();
+    this.accountService.getLogOut().subscribe({
+      error: err => console.error(err)
+    });
     this.accountService.isLoggedIn = false;
     this.router.navigate(['']);
   }
