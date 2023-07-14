@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from 'src/app/services/account.service';
-import { RefreshToken } from 'src/app/models/refreshToken';
 import { DashboardService } from 'src/app/services/dashboard.service';
+import { RecipeFromDb } from 'src/app/models/recipeFromDb';
+import { Router } from '@angular/router';
+import { RecipeService } from 'src/app/services/recipe.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,8 +12,11 @@ import { DashboardService } from 'src/app/services/dashboard.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
+  dashboardRecipes?: RecipeFromDb[];
+  deleteThis = new FormControl('');
 
-  constructor(private accountService: AccountService, private dashboardService: DashboardService) { }
+  constructor(private accountService: AccountService, private dashboardService: DashboardService,
+    private router: Router, private recipeService: RecipeService) { }
 
   ngOnInit() {
     this.accountService.postNewToken().subscribe({
@@ -18,11 +24,28 @@ export class DashboardComponent implements OnInit {
         localStorage["token"] = newToken.token;
         localStorage["refreshToken"] = newToken.refreshToken;
         this.dashboardService.getDashboard().subscribe({
-          next: value => console.log(value),
-          error: err => console.error(err)
+          next: (dashboardRecipes: RecipeFromDb[]) => {
+            this.dashboardRecipes = dashboardRecipes;
+          },
+          error: err => {
+            console.error(err);
+            this.router.navigate(['/log-in']);
+          }
         });
       },
-      error: err => console.error(err)
+      error: err => {
+        console.error(err);
+        this.router.navigate(['/log-in']);
+      }
     });
+  }
+
+  deleteRecipe() {
+    let id: number;
+    if (this.deleteThis.value != null) {
+      console.log("deleting");
+      id = parseInt(this.deleteThis.value);
+      this.recipeService.deleteRecipe(id).subscribe();
+    }
   }
 }

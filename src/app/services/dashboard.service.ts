@@ -18,6 +18,6 @@ export class DashboardService {
         'Authorization': `bearer ${localStorage['token']}`
       })
     };
-    return this.httpClient.get(this.dashboardApi, httpOptions);
+    return this.httpClient.get<RecipeFromDb[]>(this.dashboardApi, httpOptions);
   }
 }

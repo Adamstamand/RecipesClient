@@ -8,9 +8,11 @@ import { NotFoundComponent } from './components/not-found/not-found.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { authenticationGuard } from './guards/authentication.guard';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 const routes: Routes = [
   { path: 'recipe/:id', component: RecipeComponent },
+  { path: 'dashboard', component: DashboardComponent },
   { path: 'not-found', component: NotFoundComponent },
   { path: 'recipes', component: RecipesComponent },
   { path: 'add-recipe', component: AddrecipeComponent },

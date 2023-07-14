@@ -16,7 +16,6 @@ import { RecipeFromDb } from 'src/app/models/recipeFromDb';
   styleUrls: ['./addrecipe.component.css']
 })
 export class AddrecipeComponent {
-  recipe!: Recipe;
   ingredients: Ingredient[] = [];
   instructions: Instruction[] = [];
 
@@ -62,31 +61,22 @@ export class AddrecipeComponent {
   }
 
   submitRecipe() {
-    this.recipe = new Recipe(this.getRecipeValue('name'),
-      this.getRecipeValue('timeToPrepare'),
-      this.ingredients,
-      this.getRecipeValue('description'),
-      this.instructions,
-      this.getRecipeValue('photo'),
-      this.getRecipeValue('privacy')
-    );
+    let recipeRequest: Recipe = {
+      name: this.getRecipeValue('name'),
+      timeToPrepare: this.getRecipeValue('timeToPrepare'),
+      ingredients: this.ingredients,
+      description: this.getRecipeValue('description'),
+      instructions: this.instructions,
+      photo: this.getRecipeValue('photo'),
+      privacy: this.getRecipeValue('privacy')
+    };
 
     this.accountService.postNewToken().subscribe({
       next: newToken => {
         localStorage['token'] = newToken.token;
         localStorage['refreshToken'] = newToken.refreshToken;
 
-        let tokenRequest: RefreshToken = {
-          token: newToken.token,
-          refreshToken: newToken.refreshToken
-        };
-
-        let addRecipe: AddRecipe = {
-          token: tokenRequest,
-          recipe: this.recipe
-        };
-
-        this.recipeService.postRecipe(addRecipe).subscribe({
+        this.recipeService.postRecipe(recipeRequest).subscribe({
           next: (value: RecipeFromDb) => {
             console.log(value);
             this.route.navigate([`/recipe/${value.recipeId}`]);

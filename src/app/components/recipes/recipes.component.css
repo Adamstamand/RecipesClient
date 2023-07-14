@@ -1,17 +1,21 @@
-.food-image {
-    max-height: 70%;
-}
-
 .container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    grid-gap: 30px;
-    margin-bottom: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 10px;
     text-align: center;
-    font-size: 1rem;
-    font-weight: 600;
+    min-height: 90vh;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 20px;
 }
 
 .recipe-container {
-    height: 400px
+    max-height: 50vh;
+    box-shadow: 0px 3px 5px #ccc;
+    padding-bottom: 8px;
+}
+
+.food-image {
+    max-height: 70%;
+    max-width: 90%;
 }

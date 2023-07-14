@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-import { AddRecipe } from '../models/addRecipe';
+import { Recipe } from '../models/recipe';
 import { RecipeFromDb } from '../models/recipeFromDb';
 
 @Injectable({
@@ -33,7 +33,7 @@ export class RecipeService {
     return this.httpClient.get<RecipeFromDb>(`${this.recipeUrl}/${id}`, httpOptions);
   };
 
-  postRecipe(recipe: AddRecipe): Observable<RecipeFromDb> {
+  postRecipe(recipe: Recipe): Observable<RecipeFromDb> {
     let httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -41,5 +41,15 @@ export class RecipeService {
       })
     };
     return this.httpClient.post<RecipeFromDb>(this.recipeUrl, recipe, httpOptions);
+  }
+
+  deleteRecipe(id: number) {
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `bearer ${localStorage['token']}`
+      })
+    };
+    return this.httpClient.delete<number>(`${this.recipeUrl}/${id}`, httpOptions);
   }
 }

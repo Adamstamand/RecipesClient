@@ -1,1 +1,11 @@
-<p>dashboard works!</p>
+<h1>My Recipes:</h1>
+<ul>
+    <li *ngFor="let recipe of dashboardRecipes"><a [routerLink]="['/recipe', recipe.recipeId]">{{recipe.name}}</a></li>
+</ul>
+
+<div>
+    <label for="delete">Delete: </label>
+    <input id="delete" type="text" [formControl]="deleteThis">
+    <h1>{{deleteThis.value}}</h1>
+    <button type="button" (click)="deleteRecipe()">Delete</button>
+</div>
