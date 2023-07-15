@@ -13,11 +13,6 @@ export class RecipesComponent implements OnInit {
   recipes?: RecipeFromDb[];
   constructor(private recipeService: RecipeService, private accountService: AccountService) { }
 
-  whatsTheRecipe() {
-    console.log(this.recipes);
-    console.log(localStorage['token']);
-  }
-
   ngOnInit() {
     this.getRecipes();
 
@@ -27,8 +22,7 @@ export class RecipesComponent implements OnInit {
   getRecipes() {
     this.recipeService.getAllRecipes().subscribe({
       next: recipes => this.recipes = recipes,
-      error: error => console.log(error)
+      error: err => console.log(err)
     });
-
   }
 }

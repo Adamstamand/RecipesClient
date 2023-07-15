@@ -1,12 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RecipeService } from '../../services/recipe.service';
 import { Recipe } from '../../models/recipe';
 import { Instruction } from '../../models/instruction';
 import { Ingredient } from '../../models/ingredient';
 import { AccountService } from 'src/app/services/account.service';
-import { AddRecipe } from 'src/app/models/addRecipe';
-import { RefreshToken } from 'src/app/models/refreshToken';
 import { Router } from '@angular/router';
 import { RecipeFromDb } from 'src/app/models/recipeFromDb';
 
@@ -15,9 +13,10 @@ import { RecipeFromDb } from 'src/app/models/recipeFromDb';
   templateUrl: './addrecipe.component.html',
   styleUrls: ['./addrecipe.component.css']
 })
-export class AddrecipeComponent {
+export class AddrecipeComponent implements OnInit {
   ingredients: Ingredient[] = [];
   instructions: Instruction[] = [];
+  isLoggedIn: boolean = false;
 
   recipeForm: FormGroup = this.formbuilder.group({
     name: ['', Validators.required],
@@ -30,7 +29,22 @@ export class AddrecipeComponent {
   });
 
   constructor(private recipeService: RecipeService, private formbuilder: FormBuilder,
-    private accountService: AccountService, private route: Router) { };
+    private accountService: AccountService, private router: Router) { };
+
+  ngOnInit(): void {
+    this.accountService.postNewToken().subscribe({
+      next: newToken => {
+        localStorage["token"] = newToken.token;
+        localStorage["refreshToken"] = newToken.refreshToken;
+        this.accountService.isLoggedIn = true;
+        this.isLoggedIn = true;
+      },
+      error: err => {
+        console.error(err);
+        this.router.navigate(['/log-in']);
+      }
+    });
+  }
 
   addIngredient() {
     if (this.recipeForm.controls['ingredients'].value !== null
@@ -40,7 +54,6 @@ export class AddrecipeComponent {
       this.ingredients.push(newIngredient);
       this.recipeForm.controls['ingredients'].reset();
     }
-    console.log(this.ingredients);
   }
 
   addInstruction() {
@@ -51,7 +64,6 @@ export class AddrecipeComponent {
       this.instructions.push(newInstruction);
       this.recipeForm.controls['instructions'].reset();
     }
-    console.log(this.instructions);
   }
 
   removeValue<T>(valueArray: T[], value: T) {
@@ -78,9 +90,9 @@ export class AddrecipeComponent {
 
         this.recipeService.postRecipe(recipeRequest).subscribe({
           next: (value: RecipeFromDb) => {
-            console.log(value);
-            this.route.navigate([`/recipe/${value.recipeId}`]);
-          }
+            this.router.navigate([`/recipe/${value.recipeId}`]);
+          },
+          error: err => console.error(err)
         });
       },
       error: err => console.error('Error submitting recipe:', err)

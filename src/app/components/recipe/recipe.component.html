@@ -1,19 +1,15 @@
-<section class="container" *ngIf="recipe != null">
-    <div class="recipe-container">
-        <h1>{{recipe.name}}</h1>
-        <p>{{recipe.timeToPrepare}} Minutes Preparation</p>
-        <img class="food-image" src={{recipe.photo}} />
+<section *ngIf="recipe != null">
+    <h1 class="underline">{{recipe.name}}</h1>
+    <p>{{recipe.timeToPrepare}} Minutes Preparation</p>
+    <img class="food-image" src={{recipe.photo}} alt="{{recipe.name}} photo" />
 
-    </div>
     <p>{{recipe.description}}</p>
+    <h2>Ingredients:</h2>
     <ul>
-        <h2>Ingredients:</h2>
         <li *ngFor="let ingredient of recipe.ingredients">{{ingredient.words}}</li>
     </ul>
+    <h2>Instructions:</h2>
     <ol>
-        <h2>Instructions:</h2>
         <li *ngFor="let instruction of recipe.instructions">{{instruction.words}}</li>
     </ol>
 </section>
-
-<button (click)="whatsTheRecipe()">Click Me</button>

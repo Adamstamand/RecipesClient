@@ -7,7 +7,6 @@ import { RecipeComponent } from './components/recipe/recipe.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
-import { authenticationGuard } from './guards/authentication.guard';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 
 const routes: Routes = [

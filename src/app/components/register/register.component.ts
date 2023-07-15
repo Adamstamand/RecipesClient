@@ -11,12 +11,11 @@ import { CompareValidation } from '../../validators/passwordValidator';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent {
-  isFormSubmitted: boolean = false;
 
   registerForm: FormGroup = this.formBuilder.group({
-    email: ['', Validators.required],
-    password: ['', Validators.required],
-    confirmPassword: ['', Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(8)]],
+    confirmPassword: ['', [Validators.required, Validators.minLength(8)]],
   }, {
     validators: [CompareValidation("password", "confirmPassword")]
   });
@@ -24,14 +23,8 @@ export class RegisterComponent {
   constructor(private formBuilder: FormBuilder, private accountService: AccountService, private router: Router) { }
 
   submitRegister() {
-    this.isFormSubmitted = true;
-
-    console.log(this.registerForm.value);
-
     this.accountService.postRegister(this.registerForm.value).subscribe({
       next: (response: any) => {
-        console.log(response);
-        this.isFormSubmitted = false;
         localStorage["token"] = response.token;
         localStorage["refreshToken"] = response.refreshToken;
         this.accountService.isLoggedIn = true;

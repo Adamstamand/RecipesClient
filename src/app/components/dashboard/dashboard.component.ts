@@ -14,6 +14,7 @@ import { FormControl } from '@angular/forms';
 export class DashboardComponent implements OnInit {
   dashboardRecipes?: RecipeFromDb[];
   deleteThis = new FormControl('');
+  isLoggedIn: boolean = false;
 
   constructor(private accountService: AccountService, private dashboardService: DashboardService,
     private router: Router, private recipeService: RecipeService) { }
@@ -23,6 +24,8 @@ export class DashboardComponent implements OnInit {
       next: newToken => {
         localStorage["token"] = newToken.token;
         localStorage["refreshToken"] = newToken.refreshToken;
+        this.accountService.isLoggedIn = true;
+        this.isLoggedIn = true;
         this.dashboardService.getDashboard().subscribe({
           next: (dashboardRecipes: RecipeFromDb[]) => {
             this.dashboardRecipes = dashboardRecipes;

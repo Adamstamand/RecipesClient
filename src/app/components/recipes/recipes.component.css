@@ -3,10 +3,6 @@
     grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 10px;
     text-align: center;
-    min-height: 90vh;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 20px;
 }
 
 .recipe-container {
