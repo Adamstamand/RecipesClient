@@ -1,14 +1,31 @@
 <div *ngIf="isLoggedIn">
     <h1>My Recipes:</h1>
-    <ul>
-        <li *ngFor="let recipe of dashboardRecipes"><a [routerLink]="['/recipe', recipe.recipeId]">{{recipe.name}}</a>
-        </li>
-    </ul>
+    <div>
+        <h2>Private Recipes:</h2>
+        <ul>
+            <ng-container *ngFor="let recipe of dashboardRecipes">
+                <li *ngIf="recipe.privacy == 'private'"><a
+                        [routerLink]="['/recipe', recipe.recipeId]">{{recipe.name}}</a>
+                </li>
+            </ng-container>
+        </ul>
+    </div>
+    <div>
+        <h2>Public Recipes:</h2>
+        <ul>
+            <ng-container *ngFor="let recipe of dashboardRecipes">
+                <li *ngIf="recipe.privacy == 'public'"><a
+                        [routerLink]="['/recipe', recipe.recipeId]">{{recipe.name}}</a>
+                </li>
+            </ng-container>
+        </ul>
+    </div>
 
     <div>
         <label for="delete">Delete: </label>
         <input id="delete" type="text" [formControl]="deleteThis">
-        <h1>{{deleteThis.value}}</h1>
-        <button type="button" (click)="deleteRecipe()">Delete</button>
+        <button type="button" [disabled]="!deleteThis.valid" (click)="deleteRecipe()">Delete</button>
     </div>
+
+    <button type="button" (click)="logDashboardRecipes()">click</button>
 </div>

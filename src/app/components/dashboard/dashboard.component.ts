@@ -5,6 +5,7 @@ import { RecipeFromDb } from 'src/app/models/recipeFromDb';
 import { Router } from '@angular/router';
 import { RecipeService } from 'src/app/services/recipe.service';
 import { FormControl } from '@angular/forms';
+import { DeleteValidator } from 'src/app/validators/deleteValidator';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,7 +14,7 @@ import { FormControl } from '@angular/forms';
 })
 export class DashboardComponent implements OnInit {
   dashboardRecipes?: RecipeFromDb[];
-  deleteThis = new FormControl('');
+  deleteThis = new FormControl('', [DeleteValidator(() => this.dashboardRecipes)]);
   isLoggedIn: boolean = false;
 
   constructor(private accountService: AccountService, private dashboardService: DashboardService,
@@ -43,12 +44,31 @@ export class DashboardComponent implements OnInit {
     });
   }
 
+  logDashboardRecipes() {
+    console.log(this.dashboardRecipes);
+  }
+
   deleteRecipe() {
     let id: number;
     if (this.deleteThis.value != null) {
-      console.log("deleting");
-      id = parseInt(this.deleteThis.value);
-      this.recipeService.deleteRecipe(id).subscribe();
+      let deleteValue = this.dashboardRecipes?.filter(recipe => recipe.name.toLowerCase() == this.deleteThis.value?.toLowerCase());
+      if (deleteValue) {
+        id = deleteValue[0].recipeId;
+        this.accountService.postNewToken().subscribe({
+          next: newToken => {
+            localStorage["token"] = newToken.token;
+            localStorage["refreshToken"] = newToken.refreshToken;
+            this.recipeService.deleteRecipe(id).subscribe({
+              error: err => console.error(err)
+            });
+          },
+          error: err => {
+            console.error(err);
+            this.router.navigate(['log-in']);
+            this.accountService.isLoggedIn = false;
+          }
+        });
+      }
     }
   }
 }

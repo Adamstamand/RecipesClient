@@ -9,4 +9,5 @@ export interface RecipeFromDb {
     ingredients: Ingredient[];
     timeToPrepare: number;
     photo: string;
+    privacy: string;
 }
