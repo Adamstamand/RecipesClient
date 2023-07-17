@@ -52,4 +52,15 @@ export class RecipeService {
     };
     return this.httpClient.delete<number>(`${this.recipeUrl}/${id}`, httpOptions);
   }
+
+  putRecipe(id: number, recipe: RecipeFromDb) {
+    let httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': `bearer ${localStorage['token']}`
+      })
+    };
+
+    return this.httpClient.put<RecipeFromDb>(`${this.recipeUrl}/${id}`, recipe, httpOptions);
+  }
 }
