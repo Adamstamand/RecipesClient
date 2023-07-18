@@ -1,5 +1,5 @@
-import { RecipeFromDb } from "./recipeFromDb";
+import { RecipeWithId } from "./recipeWithId";
 
 export interface RecipeFunc {
-    (): RecipeFromDb[] | undefined;
+    (): RecipeWithId[] | undefined;
 }

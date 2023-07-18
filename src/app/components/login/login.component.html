@@ -1,13 +1,33 @@
-<div>
+<section>
+    <h1>Log In</h1>
     <form [formGroup]="logInForm" (ngSubmit)="submitLogIn()">
         <div class="input-container">
-            <label for="email">Email:</label>
-            <input type="text" id="email" formControlName="email">
+            <label for="log-in-email">Email:</label>
+            <input type="text" id="log-in-email" formControlName="email">
         </div>
         <div class="input-container">
-            <label for="password">Password:</label>
-            <input type="password" id="password" formControlName="password">
+            <label for="log-in-password">Password:</label>
+            <input type="password" id="log-in-password" formControlName="password">
         </div>
-        <button type="submit">Log In</button>
+        <button [disabled]="!logInForm.valid" type="submit">Log In</button>
     </form>
-</div>
+</section>
+<h3>Or</h3>
+<section>
+    <h1>Register</h1>
+    <form [formGroup]="registerForm" (ngSubmit)="submitRegister()">
+        <div class="input-container">
+            <label for="register-email">Email:</label>
+            <input type="text" id="register-email" formControlName="email">
+        </div>
+        <div class="input-container">
+            <label for="register-password">Password: Min Length 8</label>
+            <input type="password" id="register-password" formControlName="password">
+        </div>
+        <div class="input-container">
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" formControlName="confirmPassword">
+        </div>
+        <button type="submit" [disabled]="!registerForm.valid">Register</button>
+    </form>
+</section>

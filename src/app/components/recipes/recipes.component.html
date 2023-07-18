@@ -4,6 +4,6 @@
             <h1>{{recipe.name}}</h1>
         </a>
         <p>{{recipe.timeToPrepare}} Minutes Preparation</p>
-        <img class="food-image" src={{recipe.photo}} />
+        <img *ngIf="recipe.photo" class="food-image" src={{recipe.photo}} alt="{{recipe.photo}} image" />
     </div>
 </section>

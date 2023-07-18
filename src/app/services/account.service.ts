@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { RegisterUser } from '../models/register-user';
-import { Observable } from 'rxjs';
+import { RegisterUser } from '../models/registerUser';
 import { LogIn } from '../models/login';
 import { RefreshToken } from '../models/refreshToken';
+import { AuthenticationResponse } from '../models/authenticationResponse';
 
 @Injectable({
   providedIn: 'root'
@@ -14,12 +14,12 @@ export class AccountService {
 
   constructor(private httpClient: HttpClient) { }
 
-  postRegister(registerUser: RegisterUser): Observable<RegisterUser> {
-    return this.httpClient.post<RegisterUser>(`${this.baseApiUrl}/register`, registerUser);
+  postRegister(registerUser: RegisterUser) {
+    return this.httpClient.post<AuthenticationResponse>(`${this.baseApiUrl}/register`, registerUser);
   }
 
-  postLogIn(logInUser: LogIn): Observable<any> {
-    return this.httpClient.post<LogIn>(`${this.baseApiUrl}/login`, logInUser);
+  postLogIn(logInUser: LogIn) {
+    return this.httpClient.post<AuthenticationResponse>(`${this.baseApiUrl}/login`, logInUser);
   }
 
   getLogOut() {
@@ -33,13 +33,13 @@ export class AccountService {
       token: token,
       refreshToken: refreshToken
     };
-    return this.httpClient.post<RefreshToken>(`${this.baseApiUrl}/new-token`, newToken);
+    return this.httpClient.post<AuthenticationResponse>(`${this.baseApiUrl}/new-token`, newToken);
   }
 
   refreshTokenOnlyIfTokenCurrentlyExists() {
     if (localStorage["token"] != undefined && localStorage["refreshToken"] != undefined) {
       this.postNewToken().subscribe({
-        next: (newToken: RefreshToken) => {
+        next: (newToken: AuthenticationResponse) => {
           this.isLoggedIn = true;
           localStorage["token"] = newToken.token;
           localStorage["refreshToken"] = newToken.refreshToken;

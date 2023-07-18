@@ -6,7 +6,8 @@ import { Instruction } from '../../models/instruction';
 import { Ingredient } from '../../models/ingredient';
 import { AccountService } from 'src/app/services/account.service';
 import { Router } from '@angular/router';
-import { RecipeFromDb } from 'src/app/models/recipeFromDb';
+import { RecipeWithId } from 'src/app/models/recipeWithId';
+import { AuthenticationResponse } from 'src/app/models/authenticationResponse';
 
 @Component({
   selector: 'app-addrecipe',
@@ -25,9 +26,8 @@ export class AddrecipeComponent implements OnInit {
     privacy: ['public', Validators.required],
     description: ['', Validators.required],
     instructions: [''],
-    photo: ['', [Validators.required, Validators.pattern("^https:\/\/images\.unsplash\.com\/.*")]],
+    photo: ['', Validators.pattern("^https:\/\/images\.unsplash\.com\/.*")],
   });
-
   constructor(private recipeService: RecipeService, private formbuilder: FormBuilder,
     private accountService: AccountService, private router: Router) { };
 
@@ -44,6 +44,21 @@ export class AddrecipeComponent implements OnInit {
         this.router.navigate(['/log-in']);
       }
     });
+  }
+
+  removeIngredient(event: Event) {
+    let eventValue: string = (event.target as HTMLInputElement).value;
+    let indexToRemove = this.ingredients.findIndex(ingredient => ingredient.words == eventValue);
+    this.ingredients.splice(indexToRemove, 1);
+  }
+
+  removeInstruction(event: Event) {
+    let eventValue: string = (event.target as HTMLInputElement).value;
+    let indexToRemove = this.instructions.findIndex(instruction => instruction.words == eventValue);
+    this.instructions.splice(indexToRemove, 1);
+    for (let i = 0; i < this.instructions.length; i++) {
+      this.instructions[i].position = i;
+    }
   }
 
   addIngredient() {
@@ -66,40 +81,30 @@ export class AddrecipeComponent implements OnInit {
     }
   }
 
-  removeValue<T>(valueArray: T[], value: T) {
-    const index = valueArray.indexOf(value);
-    valueArray.splice(index, 1);
-
-  }
-
   submitRecipe() {
     let recipeRequest: Recipe = {
-      name: this.getRecipeValue('name'),
-      timeToPrepare: this.getRecipeValue('timeToPrepare'),
+      name: this.recipeForm.get('name')?.value,
+      timeToPrepare: this.recipeForm.get('timeToPrepare')?.value,
+      description: this.recipeForm.get('description')?.value,
+      photo: this.recipeForm.get('photo')?.value,
+      privacy: this.recipeForm.get('privacy')?.value,
       ingredients: this.ingredients,
-      description: this.getRecipeValue('description'),
-      instructions: this.instructions,
-      photo: this.getRecipeValue('photo'),
-      privacy: this.getRecipeValue('privacy')
+      instructions: this.instructions
     };
 
     this.accountService.postNewToken().subscribe({
-      next: newToken => {
-        localStorage['token'] = newToken.token;
-        localStorage['refreshToken'] = newToken.refreshToken;
+      next: (response: AuthenticationResponse) => {
+        localStorage['token'] = response.token;
+        localStorage['refreshToken'] = response.refreshToken;
 
         this.recipeService.postRecipe(recipeRequest).subscribe({
-          next: (value: RecipeFromDb) => {
-            this.router.navigate([`/recipe/${value.recipeId}`]);
+          next: (recipe: RecipeWithId) => {
+            this.router.navigate([`/recipe/${recipe.recipeId}`]);
           },
           error: err => console.error(err)
         });
       },
       error: err => console.error('Error submitting recipe:', err)
     });
-  }
-
-  private getRecipeValue(control: string) {
-    return this.recipeForm.get(control)!.value;
   }
 }

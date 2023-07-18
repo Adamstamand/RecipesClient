@@ -1,8 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
-import { Recipe } from '../models/recipe';
-import { RecipeFromDb } from '../models/recipeFromDb';
+import { RecipeWithId } from '../models/recipeWithId';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +18,6 @@ export class DashboardService {
         'Authorization': `bearer ${localStorage['token']}`
       })
     };
-    return this.httpClient.get<RecipeFromDb[]>(this.dashboardApi, httpOptions);
+    return this.httpClient.get<RecipeWithId[]>(this.dashboardApi, httpOptions);
   }
 }

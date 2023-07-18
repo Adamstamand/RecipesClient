@@ -1,7 +1,7 @@
 import { Ingredient } from "./ingredient";
 import { Instruction } from "./instruction";
 
-export interface RecipeFromDb {
+export interface RecipeWithId {
     recipeId: number;
     name: string;
     description: string;

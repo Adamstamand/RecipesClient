@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Recipe } from '../models/recipe';
-import { RecipeFromDb } from '../models/recipeFromDb';
+import { RecipeWithId } from '../models/recipeWithId';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +20,7 @@ export class RecipeService {
         'Authorization': `bearer ${localStorage['token']}`
       })
     };
-    return this.httpClient.get<RecipeFromDb[]>(this.recipeUrl, httpOptions);
+    return this.httpClient.get<RecipeWithId[]>(this.recipeUrl, httpOptions);
   }
 
   getSpecificRecipe(id: number) {
@@ -30,17 +30,17 @@ export class RecipeService {
         'Authorization': `bearer ${localStorage['token']}`
       })
     };
-    return this.httpClient.get<RecipeFromDb>(`${this.recipeUrl}/${id}`, httpOptions);
+    return this.httpClient.get<RecipeWithId>(`${this.recipeUrl}/${id}`, httpOptions);
   };
 
-  postRecipe(recipe: Recipe): Observable<RecipeFromDb> {
+  postRecipe(recipe: Recipe): Observable<RecipeWithId> {
     let httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': `bearer ${localStorage['token']}`
       })
     };
-    return this.httpClient.post<RecipeFromDb>(this.recipeUrl, recipe, httpOptions);
+    return this.httpClient.post<RecipeWithId>(this.recipeUrl, recipe, httpOptions);
   }
 
   deleteRecipe(id: number) {
@@ -53,14 +53,13 @@ export class RecipeService {
     return this.httpClient.delete<number>(`${this.recipeUrl}/${id}`, httpOptions);
   }
 
-  putRecipe(id: number, recipe: RecipeFromDb) {
+  putRecipe(id: number, recipe: RecipeWithId) {
     let httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': `bearer ${localStorage['token']}`
       })
     };
-
-    return this.httpClient.put<RecipeFromDb>(`${this.recipeUrl}/${id}`, recipe, httpOptions);
+    return this.httpClient.put<RecipeWithId>(`${this.recipeUrl}/${id}`, recipe, httpOptions);
   }
 }

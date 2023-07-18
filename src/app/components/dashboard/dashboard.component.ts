@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from 'src/app/services/account.service';
 import { DashboardService } from 'src/app/services/dashboard.service';
-import { RecipeFromDb } from 'src/app/models/recipeFromDb';
+import { RecipeWithId } from 'src/app/models/recipeWithId';
 import { Router } from '@angular/router';
 import { RecipeService } from 'src/app/services/recipe.service';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
-import { DeleteValidator } from 'src/app/validators/deleteValidator';
 import { Ingredient } from 'src/app/models/ingredient';
 import { Instruction } from 'src/app/models/instruction';
 
@@ -15,21 +14,22 @@ import { Instruction } from 'src/app/models/instruction';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  dashboardRecipes?: RecipeFromDb[];
+  dashboardRecipes?: RecipeWithId[];
   isLoggedIn: boolean = false;
   ingredients: Ingredient[] = [];
   instructions: Instruction[] = [];
 
-  deleteThis = new FormControl('', [DeleteValidator(() => this.dashboardRecipes)]);
+  deleteThis = new FormControl('', Validators.required);
 
   recipeForm: FormGroup = this.formbuilder.group({
+    selectRecipe: ['', Validators.required],
     name: ['', Validators.required],
     timeToPrepare: ['', Validators.required],
     ingredients: [''],
     privacy: ['public', Validators.required],
     description: ['', Validators.required],
     instructions: [''],
-    photo: ['', [Validators.required, Validators.pattern("^https:\/\/images\.unsplash\.com\/.*")]],
+    photo: ['', Validators.pattern("^https:\/\/images\.unsplash\.com\/.*")],
   });
 
   constructor(private accountService: AccountService, private dashboardService: DashboardService,
@@ -43,7 +43,7 @@ export class DashboardComponent implements OnInit {
         this.accountService.isLoggedIn = true;
         this.isLoggedIn = true;
         this.dashboardService.getDashboard().subscribe({
-          next: (dashboardRecipes: RecipeFromDb[]) => {
+          next: (dashboardRecipes: RecipeWithId[]) => {
             this.dashboardRecipes = dashboardRecipes;
           },
           error: err => {
@@ -58,30 +58,27 @@ export class DashboardComponent implements OnInit {
       }
     });
 
-    this.recipeForm.get('name')!.valueChanges.subscribe({
+    this.recipeForm.get('selectRecipe')!.valueChanges.subscribe({
       next: () => {
-        for (let recipe of this.findRecipeFromSelectValue()!) {
-          this.recipeForm.patchValue({
-            timeToPrepare: recipe.timeToPrepare,
-            privacy: recipe.privacy,
-            description: recipe.description,
-            photo: recipe.photo
-          });
-          this.ingredients = [];
-          this.instructions = [];
-          for (let ingredient of recipe.ingredients) {
-            this.ingredients.push(ingredient);
-          }
-          for (let instruction of recipe.instructions) {
-            this.instructions.push(instruction);
-          }
+        let selectedRecipe = this.findRecipeFromSelectValue()![0];
+        this.recipeForm.patchValue({
+          name: selectedRecipe.name,
+          timeToPrepare: selectedRecipe.timeToPrepare,
+          privacy: selectedRecipe.privacy,
+          description: selectedRecipe.description,
+          photo: selectedRecipe.photo
+        });
+        this.ingredients = [];
+        this.instructions = [];
+        for (let ingredient of selectedRecipe.ingredients) {
+          this.ingredients.push(ingredient);
+        }
+        for (let instruction of selectedRecipe.instructions) {
+          this.instructions.push(instruction);
         }
       }
-    });
-  }
-
-  logDashboardRecipes() {
-    console.log(this.dashboardRecipes);
+    }
+    );
   }
 
   deleteRecipe() {
@@ -118,6 +115,13 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  removeIngredient(event: Event) {
+    let eventValue: string = (event.target as HTMLInputElement).value;
+    let indexToRemove = this.ingredients.findIndex(ingredient => ingredient.words == eventValue);
+    this.ingredients.splice(indexToRemove, 1);
+    console.log(this.ingredients);
+  }
+
   addInstruction() {
     if (this.recipeForm.controls['instructions'].value !== null
       && !this.instructions.some(value => value.words == this.recipeForm.controls['instructions'].value)
@@ -128,11 +132,19 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  removeInstruction(event: Event) {
+    let eventValue: string = (event.target as HTMLInputElement).value;
+    let indexToRemove = this.instructions.findIndex(instruction => instruction.words == eventValue);
+    this.instructions.splice(indexToRemove, 1);
+    for (let i = 0; i < this.instructions.length; i++) {
+      this.instructions[i].position = i;
+    }
+  }
+
   findRecipeFromSelectValue() {
-    if (this.recipeForm.controls["name"].value != undefined && this.dashboardRecipes != undefined) {
+    if (this.recipeForm.get("selectRecipe")!.value != undefined && this.dashboardRecipes != undefined) {
       let selectedRecipe = this.dashboardRecipes
-        .filter(recipe => recipe.name == this.recipeForm.controls["name"].value);
-      console.log(selectedRecipe);
+        .filter(recipe => recipe.name == this.recipeForm.get("selectRecipe")!.value);
       return selectedRecipe;
     }
     return null;
@@ -140,7 +152,7 @@ export class DashboardComponent implements OnInit {
 
   submitRecipeEdit() {
     let recipeToEditId = this.findRecipeFromSelectValue()![0].recipeId;
-    let editRecipe: RecipeFromDb = {
+    let editRecipe: RecipeWithId = {
       recipeId: recipeToEditId,
       name: this.recipeForm.get('name')?.value,
       timeToPrepare: this.recipeForm.get('timeToPrepare')?.value,
@@ -151,6 +163,7 @@ export class DashboardComponent implements OnInit {
       instructions: this.instructions
     };
     this.recipeService.putRecipe(recipeToEditId, editRecipe).subscribe({
+      next: () => this.router.navigate([`recipe/${recipeToEditId}`]),
       error: err => console.error(err)
     });
   }

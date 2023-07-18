@@ -1,7 +1,7 @@
 <section *ngIf="recipe != null">
     <h1 class="underline">{{recipe.name}}</h1>
     <p>{{recipe.timeToPrepare}} Minutes Preparation</p>
-    <img class="food-image" src={{recipe.photo}} alt="{{recipe.name}} photo" />
+    <img *ngIf="recipe.photo" class="food-image" src={{recipe.photo}} alt="{{recipe.name}} photo" />
 
     <p>{{recipe.description}}</p>
     <h2>Ingredients:</h2>

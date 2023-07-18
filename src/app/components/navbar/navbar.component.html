@@ -3,8 +3,7 @@
         <a routerLink="">Home</a>
         <a routerLink="add-recipe">Add Recipe</a>
         <a routerLink="dashboard">Dashboard</a>
-        <a *ngIf="!accountService.isLoggedIn" routerLink="log-in">Log In</a>
-        <a *ngIf="!accountService.isLoggedIn" routerLink="register">Register</a>
+        <a *ngIf="!accountService.isLoggedIn" routerLink="log-in">Log In / Register</a>
         <app-logout *ngIf="accountService.isLoggedIn"></app-logout>
     </nav>
 </div>

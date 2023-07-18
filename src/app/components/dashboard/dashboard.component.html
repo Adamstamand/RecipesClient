@@ -1,4 +1,4 @@
-<div *ngIf="isLoggedIn">
+<ng-container *ngIf="isLoggedIn">
     <h1>My Recipes:</h1>
     <div>
         <h2>Private Recipes:</h2>
@@ -21,70 +21,92 @@
         </ul>
     </div>
 
+    <hr>
+
     <div>
         <h2>Delete A Recipe:</h2>
-        <label for="delete">Delete: </label>
-        <input id="delete" type="text" [formControl]="deleteThis">
-        <button type="button" [disabled]="!deleteThis.valid" (click)="deleteRecipe()">Delete</button>
-    </div>
-</div>
-
-<div *ngIf="isLoggedIn">
-    <h2>Edit One Of Your Recipes</h2>
-    <form [formGroup]="recipeForm" (ngSubmit)="submitRecipeEdit()">
-        <div class="input-container">
-            <label for="recipeName">Recipe Name:</label>
-            <select name="recipeName" id="recipeName" formControlName="name">
-                <option value=""></option>
-                <option *ngFor="let recipe of dashboardRecipes" value="{{recipe.name}}">{{recipe.name}}</option>
-            </select>
-        </div>
-        <ng-container *ngIf="recipeForm.get('name')!.value != ''">
-            <div class="input-container">
-                <label for="timeToPrepare">Time To Prepare:</label>
-                <input id="timeToPrepare" type="number" formControlName="timeToPrepare">
-            </div>
-
-            <div class="input-container">
-                <label for="description">Description: </label>
-                <textarea class="description-box" id="description" type="text" formControlName="description"></textarea>
-            </div>
-
-            <div class="input-container">
-                <label for="photo">Photo (Unsplash image url): </label>
-                <input id="photo" type="text" formControlName="photo" placeholder="https://images.unsplash.com">
-            </div>
-            <div class="input-container">
-                <label for="privacy">Privacy:</label>
-                <select name="privacy" id="privacy" formControlName="privacy">
-                    <option value="public">Public</option>
-                    <option value="private">Private</option>
+        <div class="margin-left">
+            <div class=" input-container">
+                <label for="delete">Delete:</label>
+                <select name="delete" id="delete" [formControl]="deleteThis">
+                    <option value=""></option>
+                    <option *ngFor="let recipe of dashboardRecipes" value="{{recipe.name}}">{{recipe.name}}</option>
                 </select>
             </div>
-
-            <section class="input-container">
-                <label for="ingredients">Add Ingredient: </label>
-                <input id="ingredients" type="text" formControlName="ingredients">
-                <button type="button" (click)="addIngredient()">Add Ingredient</button>
-                <ul class="add-recipe-lists">
-                    <li *ngFor="let ingredient of ingredients">{{ingredient.words}}</li>
-                </ul>
-            </section>
-
-            <section class="input-container">
-
-                <label for="instructions">Add Instruction: </label>
-                <input id="instructions" type="text" formControlName="instructions">
-                <button type="button" (click)="addInstruction()">Add Instruction</button>
-                <ol class="add-recipe-lists">
-                    <li *ngFor="let instruction of instructions">{{instruction.words}}</li>
-                </ol>
-            </section>
-        </ng-container>
+            <button type="button" [disabled]="!deleteThis.valid" (click)="deleteRecipe()">Delete</button>
+        </div>
+    </div>
 
 
-        <button type="submit" [disabled]="!recipeForm.valid || 
-        instructions.length < 1 || 
-        ingredients.length < 1">Submit</button>
-    </form>
-</div>
+    <hr>
+
+
+    <div>
+        <h2>Edit One Of Your Recipes:</h2>
+        <form class="margin-left" [formGroup]="recipeForm" (ngSubmit)="submitRecipeEdit()">
+            <div class="input-container">
+                <label for="selectRecipe">Select Recipe:</label>
+                <select name="selectRecipe" id="recipeName" formControlName="selectRecipe">
+                    <option value=""></option>
+                    <option *ngFor="let recipe of dashboardRecipes" value="{{recipe.name}}">{{recipe.name}}</option>
+                </select>
+            </div>
+            <ng-container *ngIf="recipeForm.get('selectRecipe')!.value != ''">
+                <div class="input-container">
+                    <label for="recipeName">Recipe Name*: </label>
+                    <input id="recipeName" type="text" formControlName="name">
+                </div>
+                <div class="input-container">
+                    <label for="timeToPrepare">Time To Prepare*:</label>
+                    <input id="timeToPrepare" type="number" formControlName="timeToPrepare">
+                </div>
+
+                <div class="input-container">
+                    <label for="description">Description*: </label>
+                    <textarea class="description-box" id="description" type="text"
+                        formControlName="description"></textarea>
+                </div>
+
+                <div class="input-container">
+                    <label for="photo">Photo (Unsplash image url): </label>
+                    <input id="photo" type="text" formControlName="photo" placeholder="https://images.unsplash.com">
+                </div>
+                <div class="input-container">
+                    <label for="privacy">Privacy*:</label>
+                    <select name="privacy" id="privacy" formControlName="privacy">
+                        <option value="public">Public</option>
+                        <option value="private">Private</option>
+                    </select>
+                </div>
+
+                <section class="input-container">
+                    <label for="ingredients">Add Ingredient*: </label>
+                    <input id="ingredients" type="text" formControlName="ingredients">
+                    <button type="button" (click)="addIngredient()">Add Ingredient</button>
+                    <ul class="add-recipe-lists">
+                        <li *ngFor="let ingredient of ingredients">{{ingredient.words}}
+                            <span><button type="button" [value]="ingredient.words"
+                                    (click)="removeIngredient($event)">X</button></span>
+                        </li>
+                    </ul>
+                </section>
+
+                <section class="input-container">
+
+                    <label for="instructions">Add Instruction*: </label>
+                    <input id="instructions" type="text" formControlName="instructions">
+                    <button type="button" (click)="addInstruction()">Add Instruction</button>
+                    <ol class="add-recipe-lists">
+                        <li *ngFor="let instruction of instructions">{{instruction.words}}
+                            <span><button type="button" [value]="instruction.words"
+                                    (click)="removeInstruction($event)">X</button></span>
+                        </li>
+                    </ol>
+                </section>
+            </ng-container>
+            <button type="submit" [disabled]="!recipeForm.valid || 
+                instructions.length < 1 || 
+                ingredients.length < 1">Update</button>
+        </form>
+    </div>
+</ng-container>

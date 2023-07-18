@@ -2,18 +2,19 @@
     <h1>Add a New Recipe!</h1>
     <form [formGroup]="recipeForm" (ngSubmit)="submitRecipe()">
         <section>
+            <p>* = required</p>
             <div class="input-container">
-                <label for="recipeName">Recipe Name: </label>
+                <label for="recipeName">Recipe Name*: </label>
                 <input id="recipeName" type="text" formControlName="name">
             </div>
 
             <div class="input-container">
-                <label for="timeToPrepare">Time To Prepare: </label>
+                <label for="timeToPrepare">Time To Prepare*: </label>
                 <input id="timeToPrepare" type="text" formControlName="timeToPrepare">
             </div>
 
             <div class="input-container">
-                <label for="description">Description: </label>
+                <label for="description">Description*: </label>
                 <textarea class="description-box" id="description" type="text" formControlName="description"></textarea>
             </div>
 
@@ -22,7 +23,7 @@
                 <input id="photo" type="text" formControlName="photo" placeholder="https://images.unsplash.com">
             </div>
             <div class="input-container">
-                <label for="privacy">Privacy:</label>
+                <label for="privacy">Privacy*:</label>
                 <select name="privacy" id="privacy" formControlName="privacy">
                     <option value="public">Public</option>
                     <option value="private">Private</option>
@@ -31,21 +32,26 @@
         </section>
 
         <section class="input-container">
-            <label for="ingredients">Add Ingredient: </label>
+            <label for="ingredients">Add Ingredient*: </label>
             <input id="ingredients" type="text" formControlName="ingredients">
             <button type="button" (click)="addIngredient()">Add Ingredient</button>
             <ul class="add-recipe-lists">
-                <li *ngFor="let ingredient of ingredients">{{ingredient.words}}</li>
+                <li *ngFor="let ingredient of ingredients">{{ingredient.words}}
+                    <span><button type="button" [value]="ingredient.words"
+                            (click)="removeIngredient($event)">X</button></span>
+                </li>
             </ul>
         </section>
 
         <section class="input-container">
-
-            <label for="instructions">Add Instruction: </label>
+            <label for="instructions">Add Instruction*: </label>
             <input id="instructions" type="text" formControlName="instructions">
             <button type="button" (click)="addInstruction()">Add Instruction</button>
             <ol class="add-recipe-lists">
-                <li *ngFor="let instruction of instructions">{{instruction.words}}</li>
+                <li *ngFor="let instruction of instructions">{{instruction.words}}
+                    <span><button type="button" [value]="instruction.words"
+                            (click)="removeInstruction($event)">X</button></span>
+                </li>
             </ol>
         </section>
 

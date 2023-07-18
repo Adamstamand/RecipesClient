@@ -10,7 +10,6 @@ import { AddrecipeComponent } from './components/addrecipe/addrecipe.component';
 import { RecipeComponent } from './components/recipe/recipe.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { RegisterComponent } from './components/register/register.component';
 import { LoginComponent } from './components/login/login.component';
 import { LogoutComponent } from './components/logout/logout.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -23,7 +22,6 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
     RecipeComponent,
     NotFoundComponent,
     NavbarComponent,
-    RegisterComponent,
     LoginComponent,
     LogoutComponent,
     DashboardComponent
