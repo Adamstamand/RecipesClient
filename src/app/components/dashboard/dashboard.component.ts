@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AccountService } from 'src/app/services/account.service';
 import { DashboardService } from 'src/app/services/dashboard.service';
-import { RecipeWithId } from 'src/app/models/recipeWithId';
 import { Router } from '@angular/router';
 import { RecipeService } from 'src/app/services/recipe.service';
 import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
 import { Ingredient } from 'src/app/models/ingredient';
 import { Instruction } from 'src/app/models/instruction';
+import { Recipe } from 'src/app/models/recipe';
 
 @Component({
   selector: 'app-dashboard',
@@ -14,7 +14,7 @@ import { Instruction } from 'src/app/models/instruction';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  dashboardRecipes?: RecipeWithId[];
+  dashboardRecipes?: Recipe[];
   isLoggedIn: boolean = false;
   ingredients: Ingredient[] = [];
   instructions: Instruction[] = [];
@@ -43,7 +43,7 @@ export class DashboardComponent implements OnInit {
         this.accountService.isLoggedIn = true;
         this.isLoggedIn = true;
         this.dashboardService.getDashboard().subscribe({
-          next: (dashboardRecipes: RecipeWithId[]) => {
+          next: (dashboardRecipes: Recipe[]) => {
             this.dashboardRecipes = dashboardRecipes;
           },
           error: err => {
@@ -86,12 +86,16 @@ export class DashboardComponent implements OnInit {
     if (this.deleteThis.value != null) {
       let deleteValue = this.dashboardRecipes?.filter(recipe => recipe.name.toLowerCase() == this.deleteThis.value?.toLowerCase());
       if (deleteValue) {
-        id = deleteValue[0].recipeId;
+        id = deleteValue[0].id!;
         this.accountService.postNewToken().subscribe({
           next: newToken => {
             localStorage["token"] = newToken.token;
             localStorage["refreshToken"] = newToken.refreshToken;
             this.recipeService.deleteRecipe(id).subscribe({
+              next: () => {
+                let indexToSplice = this.dashboardRecipes!.findIndex(recipe => recipe.id == id);
+                this.dashboardRecipes?.splice(indexToSplice, 1);
+              },
               error: err => console.error(err)
             });
           },
@@ -151,9 +155,9 @@ export class DashboardComponent implements OnInit {
   }
 
   submitRecipeEdit() {
-    let recipeToEditId = this.findRecipeFromSelectValue()![0].recipeId;
-    let editRecipe: RecipeWithId = {
-      recipeId: recipeToEditId,
+    let recipeToEditId = this.findRecipeFromSelectValue()![0].id!;
+    let editRecipe: Recipe = {
+      id: recipeToEditId,
       name: this.recipeForm.get('name')?.value,
       timeToPrepare: this.recipeForm.get('timeToPrepare')?.value,
       description: this.recipeForm.get('description')?.value,
@@ -162,9 +166,21 @@ export class DashboardComponent implements OnInit {
       ingredients: this.ingredients,
       instructions: this.instructions
     };
-    this.recipeService.putRecipe(recipeToEditId, editRecipe).subscribe({
-      next: () => this.router.navigate([`recipe/${recipeToEditId}`]),
-      error: err => console.error(err)
+    this.accountService.postNewToken().subscribe({
+      next: newToken => {
+        localStorage["token"] = newToken.token;
+        localStorage["refreshToken"] = newToken.refreshToken;
+        this.recipeService.putRecipe(recipeToEditId, editRecipe).subscribe({
+          next: () => this.router.navigate([`recipe/${recipeToEditId}`]),
+          error: err => console.error(err)
+        });
+      },
+      error: err => {
+        console.error(err);
+        this.router.navigate(['log-in']);
+        this.accountService.isLoggedIn = false;
+      }
     });
-  }
+  };
+
 }

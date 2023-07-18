@@ -4,8 +4,7 @@
         <h2>Private Recipes:</h2>
         <ul>
             <ng-container *ngFor="let recipe of dashboardRecipes">
-                <li *ngIf="recipe.privacy == 'private'"><a
-                        [routerLink]="['/recipe', recipe.recipeId]">{{recipe.name}}</a>
+                <li *ngIf="recipe.privacy == 'private'"><a [routerLink]="['/recipe', recipe.id]">{{recipe.name}}</a>
                 </li>
             </ng-container>
         </ul>
@@ -14,8 +13,7 @@
         <h2>Public Recipes:</h2>
         <ul>
             <ng-container *ngFor="let recipe of dashboardRecipes">
-                <li *ngIf="recipe.privacy == 'public'"><a
-                        [routerLink]="['/recipe', recipe.recipeId]">{{recipe.name}}</a>
+                <li *ngIf="recipe.privacy == 'public'"><a [routerLink]="['/recipe', recipe.id]">{{recipe.name}}</a>
                 </li>
             </ng-container>
         </ul>

@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs';
+import { Recipe } from 'src/app/models/recipe';
 
-import { RecipeWithId } from 'src/app/models/recipeWithId';
+
 import { AccountService } from 'src/app/services/account.service';
 import { RecipeService } from 'src/app/services/recipe.service';
 
@@ -12,7 +13,7 @@ import { RecipeService } from 'src/app/services/recipe.service';
   styleUrls: ['./recipe.component.css']
 })
 export class RecipeComponent {
-  recipe?: RecipeWithId;
+  recipe?: Recipe;
 
   constructor(private activatedRoute: ActivatedRoute, private recipeService: RecipeService, private route: Router,
     private accountService: AccountService) { }

@@ -1,6 +1,6 @@
 <section class="container">
     <div class="recipe-container" *ngFor="let recipe of recipes">
-        <a [routerLink]="['/recipe/', recipe.recipeId]">
+        <a [routerLink]="['/recipe/', recipe.id]">
             <h1>{{recipe.name}}</h1>
         </a>
         <p>{{recipe.timeToPrepare}} Minutes Preparation</p>

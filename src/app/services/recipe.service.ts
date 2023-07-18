@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Recipe } from '../models/recipe';
-import { RecipeWithId } from '../models/recipeWithId';
 
 @Injectable({
   providedIn: 'root'
@@ -20,7 +19,7 @@ export class RecipeService {
         'Authorization': `bearer ${localStorage['token']}`
       })
     };
-    return this.httpClient.get<RecipeWithId[]>(this.recipeUrl, httpOptions);
+    return this.httpClient.get<Recipe[]>(this.recipeUrl, httpOptions);
   }
 
   getSpecificRecipe(id: number) {
@@ -30,17 +29,17 @@ export class RecipeService {
         'Authorization': `bearer ${localStorage['token']}`
       })
     };
-    return this.httpClient.get<RecipeWithId>(`${this.recipeUrl}/${id}`, httpOptions);
+    return this.httpClient.get<Recipe>(`${this.recipeUrl}/${id}`, httpOptions);
   };
 
-  postRecipe(recipe: Recipe): Observable<RecipeWithId> {
+  postRecipe(recipe: Recipe): Observable<Recipe> {
     let httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': `bearer ${localStorage['token']}`
       })
     };
-    return this.httpClient.post<RecipeWithId>(this.recipeUrl, recipe, httpOptions);
+    return this.httpClient.post<Recipe>(this.recipeUrl, recipe, httpOptions);
   }
 
   deleteRecipe(id: number) {
@@ -53,13 +52,13 @@ export class RecipeService {
     return this.httpClient.delete<number>(`${this.recipeUrl}/${id}`, httpOptions);
   }
 
-  putRecipe(id: number, recipe: RecipeWithId) {
+  putRecipe(id: number, recipe: Recipe) {
     let httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Authorization': `bearer ${localStorage['token']}`
       })
     };
-    return this.httpClient.put<RecipeWithId>(`${this.recipeUrl}/${id}`, recipe, httpOptions);
+    return this.httpClient.put<Recipe>(`${this.recipeUrl}/${id}`, recipe, httpOptions);
   }
 }

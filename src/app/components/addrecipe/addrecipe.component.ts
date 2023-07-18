@@ -6,7 +6,6 @@ import { Instruction } from '../../models/instruction';
 import { Ingredient } from '../../models/ingredient';
 import { AccountService } from 'src/app/services/account.service';
 import { Router } from '@angular/router';
-import { RecipeWithId } from 'src/app/models/recipeWithId';
 import { AuthenticationResponse } from 'src/app/models/authenticationResponse';
 
 @Component({
@@ -98,8 +97,8 @@ export class AddrecipeComponent implements OnInit {
         localStorage['refreshToken'] = response.refreshToken;
 
         this.recipeService.postRecipe(recipeRequest).subscribe({
-          next: (recipe: RecipeWithId) => {
-            this.router.navigate([`/recipe/${recipe.recipeId}`]);
+          next: (recipe: Recipe) => {
+            this.router.navigate([`/recipe/${recipe.id}`]);
           },
           error: err => console.error(err)
         });

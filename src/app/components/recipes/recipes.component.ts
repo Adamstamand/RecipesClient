@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
 import { RecipeService } from '../../services/recipe.service';
-import { RecipeWithId } from 'src/app/models/recipeWithId';
 import { AccountService } from 'src/app/services/account.service';
+import { Recipe } from 'src/app/models/recipe';
 
 @Component({
   selector: 'app-recipes',
@@ -10,7 +10,7 @@ import { AccountService } from 'src/app/services/account.service';
   styleUrls: ['./recipes.component.css']
 })
 export class RecipesComponent implements OnInit {
-  recipes?: RecipeWithId[];
+  recipes?: Recipe[];
   constructor(private recipeService: RecipeService, private accountService: AccountService) { }
 
   ngOnInit() {
@@ -21,7 +21,10 @@ export class RecipesComponent implements OnInit {
 
   getRecipes() {
     this.recipeService.getAllRecipes().subscribe({
-      next: recipes => this.recipes = recipes,
+      next: recipes => {
+        this.recipes = recipes;
+        console.log(recipes);
+      },
       error: err => console.log(err)
     });
   }
