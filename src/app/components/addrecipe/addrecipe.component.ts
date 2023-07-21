@@ -61,20 +61,21 @@ export class AddrecipeComponent implements OnInit {
   }
 
   addIngredient() {
-    if (this.recipeForm.controls['ingredients'].value !== null
-      && !this.ingredients.some(value => value.words == this.recipeForm.controls['ingredients'].value)
+    if (this.recipeForm.controls['ingredients'].value.trim() !== "" &&
+      !this.ingredients.some(value => value.words == this.recipeForm.controls['ingredients'].value
+      )
     ) {
-      let newIngredient = new Ingredient(this.recipeForm.controls['ingredients'].value);
+      let newIngredient = new Ingredient(this.recipeForm.controls['ingredients'].value.trim());
       this.ingredients.push(newIngredient);
       this.recipeForm.controls['ingredients'].reset();
     }
   }
 
   addInstruction() {
-    if (this.recipeForm.controls['instructions'].value !== null
+    if (this.recipeForm.controls['instructions'].value.trim() !== ""
       && !this.instructions.some(value => value.words == this.recipeForm.controls['instructions'].value)
     ) {
-      let newInstruction = new Instruction(this.recipeForm.controls['instructions'].value, this.instructions.length);
+      let newInstruction = new Instruction(this.recipeForm.controls['instructions'].value.trim(), this.instructions.length);
       this.instructions.push(newInstruction);
       this.recipeForm.controls['instructions'].reset();
     }
@@ -82,10 +83,10 @@ export class AddrecipeComponent implements OnInit {
 
   submitRecipe() {
     let recipeRequest: Recipe = {
-      name: this.recipeForm.get('name')?.value,
+      name: this.recipeForm.get('name')?.value.trim(),
       timeToPrepare: this.recipeForm.get('timeToPrepare')?.value,
-      description: this.recipeForm.get('description')?.value,
-      photo: this.recipeForm.get('photo')?.value,
+      description: this.recipeForm.get('description')?.value.trim(),
+      photo: this.recipeForm.get('photo')?.value.trim(),
       privacy: this.recipeForm.get('privacy')?.value,
       ingredients: this.ingredients,
       instructions: this.instructions

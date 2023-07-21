@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap } from 'rxjs';
+import { Instruction } from 'src/app/models/instruction';
 import { Recipe } from 'src/app/models/recipe';
 
 
@@ -14,6 +15,7 @@ import { RecipeService } from 'src/app/services/recipe.service';
 })
 export class RecipeComponent {
   recipe?: Recipe;
+  instructions?: Instruction[];
 
   constructor(private activatedRoute: ActivatedRoute, private recipeService: RecipeService, private route: Router,
     private accountService: AccountService) { }
@@ -23,8 +25,9 @@ export class RecipeComponent {
       switchMap(params => {
         return this.recipeService.getSpecificRecipe(Number(params.get('id')));
       })).subscribe({
-        next: value => {
-          this.recipe = value;
+        next: recipe => {
+          this.recipe = recipe;
+          this.instructions = recipe.instructions.sort((a, b) => a.position - b.position);
         },
         error: err => {
           console.error(err);

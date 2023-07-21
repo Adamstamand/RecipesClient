@@ -110,10 +110,10 @@ export class DashboardComponent implements OnInit {
   }
 
   addIngredient() {
-    if (this.recipeForm.controls['ingredients'].value !== null
+    if (this.recipeForm.controls['ingredients'].value.trim() !== ""
       && !this.ingredients.some(value => value.words == this.recipeForm.controls['ingredients'].value)
     ) {
-      let newIngredient = new Ingredient(this.recipeForm.controls['ingredients'].value);
+      let newIngredient = new Ingredient(this.recipeForm.controls['ingredients'].value.trim());
       this.ingredients.push(newIngredient);
       this.recipeForm.controls['ingredients'].reset();
     }
@@ -127,10 +127,10 @@ export class DashboardComponent implements OnInit {
   }
 
   addInstruction() {
-    if (this.recipeForm.controls['instructions'].value !== null
+    if (this.recipeForm.controls['instructions'].value.trim() !== ""
       && !this.instructions.some(value => value.words == this.recipeForm.controls['instructions'].value)
     ) {
-      let newInstruction = new Instruction(this.recipeForm.controls['instructions'].value, this.instructions.length);
+      let newInstruction = new Instruction(this.recipeForm.controls['instructions'].value.trim(), this.instructions.length);
       this.instructions.push(newInstruction);
       this.recipeForm.controls['instructions'].reset();
     }
@@ -158,11 +158,11 @@ export class DashboardComponent implements OnInit {
     let recipeToEditId = this.findRecipeFromSelectValue()![0].id!;
     let editRecipe: Recipe = {
       id: recipeToEditId,
-      name: this.recipeForm.get('name')?.value,
+      name: this.recipeForm.get('name')?.value.trim(),
       timeToPrepare: this.recipeForm.get('timeToPrepare')?.value,
-      description: this.recipeForm.get('description')?.value,
-      photo: this.recipeForm.get('photo')?.value,
-      privacy: this.recipeForm.get('privacy')?.value,
+      description: this.recipeForm.get('description')?.value.trim(),
+      photo: this.recipeForm.get('photo')?.value.trim(),
+      privacy: this.recipeForm.get('privacy')?.value.trim(),
       ingredients: this.ingredients,
       instructions: this.instructions
     };

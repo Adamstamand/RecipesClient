@@ -1,9 +1,9 @@
-<div class="nav-container">
+<div class="navbar-container">
     <nav>
-        <a routerLink="">Home</a>
-        <a routerLink="add-recipe">Add Recipe</a>
-        <a routerLink="dashboard">Dashboard</a>
-        <a *ngIf="!accountService.isLoggedIn" routerLink="log-in">Log In / Register</a>
+        <a routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{exact:true}">Home</a>
+        <a routerLink="add-recipe" routerLinkActive="active-link">Add Recipe</a>
+        <a routerLink="dashboard" routerLinkActive="active-link">Dashboard</a>
+        <a *ngIf="!accountService.isLoggedIn" routerLink="log-in" routerLinkActive="active-link">Log In / Register</a>
         <app-logout *ngIf="accountService.isLoggedIn"></app-logout>
     </nav>
 </div>
