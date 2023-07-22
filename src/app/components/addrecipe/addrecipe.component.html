@@ -2,28 +2,37 @@
     <h1 class="text-primary-emphasis">Add a New Recipe!</h1>
     <form [formGroup]="recipeForm" (ngSubmit)="submitRecipe()">
         <section>
-            <p class="text-dark-emphasis">* = required</p>
+            <p>* = required</p>
             <div class="input-container">
                 <label for="recipeName">Recipe Name*: </label>
                 <input class="form-control border-primary" id="recipeName" type="text" formControlName="name">
+                <div *ngIf="recipeForm.get('name')?.hasError('maxlength')" class="form-text">60 characters max</div>
             </div>
 
             <div class="input-container">
-                <label for="timeToPrepare">Time To Prepare*: </label>
+                <label for="timeToPrepare">Time To Prepare (minutes)*: </label>
                 <input class="form-control border-primary" id="timeToPrepare" type="number"
                     formControlName="timeToPrepare">
+                <div *ngIf="recipeForm.get('timeToPrepare')?.hasError('max')" class="form-text">1440 minutes max</div>
             </div>
 
             <div class="input-container">
                 <label for="description">Description*: </label>
                 <textarea class="form-control border-primary" id="description" type="text"
                     formControlName="description"></textarea>
+                <div *ngIf="recipeForm.get('description')?.hasError('maxlength')" class="form-text">500 characters max
+                </div>
             </div>
 
             <div class="input-container">
                 <label for="photo">Photo (Unsplash image url): </label>
                 <input class="form-control border-primary" id="photo" type="text" formControlName="photo"
                     placeholder="https://images.unsplash.com">
+                <div class="form-text">This field is optional.</div>
+                <div *ngIf="recipeForm.get('photo')?.hasError('pattern')" class="form-text">Only image links from
+                    Unsplash.com are accepted.</div>
+                <div *ngIf="recipeForm.get('photo')?.hasError('maxlength')" class="form-text">500 characters max
+                </div>
             </div>
             <div class="input-container">
                 <label for="privacy">Privacy*:</label>
@@ -37,10 +46,14 @@
         <section class="add-to-recipe-container">
             <div class="add-to-recipe">
                 <label for="ingredients">Add Ingredient*: </label>
-                <input class="form-control border-primary" id="ingredients" type="text" formControlName="ingredients">
+                <input class="form-control border-primary" id="ingredients" type="text" [formControl]="ingredientsForm">
+                <div *ngIf="ingredientsForm.hasError('maxlength')" class="form-text">100 characters max</div>
+                <div *ngIf="ingredientsForm.hasError('duplicate')" class="form-text">Duplicate values aren't allowed
+                </div>
             </div>
             <div class="margin-bottom">
-                <button class="btn btn-warning" type="button" (click)="addIngredient()">Add
+                <button class="btn btn-warning" type="button" (click)="addIngredient()"
+                    [disabled]="!ingredientsForm.valid">Add
                     Ingredient</button>
             </div>
             <ul>
@@ -54,10 +67,15 @@
         <section class="add-to-recipe-container">
             <div class="add-to-recipe">
                 <label for="instructions">Add Instruction*: </label>
-                <input class="form-control border-primary" id="instructions" type="text" formControlName="instructions">
+                <input class="form-control border-primary" id="instructions" type="text"
+                    [formControl]="instructionsForm">
+                <div *ngIf="instructionsForm.hasError('maxlength')" class="form-text">100 characters max</div>
+                <div *ngIf="instructionsForm.hasError('duplicate')" class="form-text">Duplicate values aren't allowed
+                </div>
             </div>
             <div class="margin-bottom">
-                <button class="btn btn-warning" type="button" (click)="addInstruction()">Add Instruction</button>
+                <button class="btn btn-warning" type="button" (click)="addInstruction()"
+                    [disabled]="!instructionsForm.valid">Add Instruction</button>
             </div>
             <ol class="add-recipe-lists">
                 <li *ngFor="let instruction of instructions">{{instruction.words}}

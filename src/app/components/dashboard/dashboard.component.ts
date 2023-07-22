@@ -7,6 +7,7 @@ import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms'
 import { Ingredient } from 'src/app/models/ingredient';
 import { Instruction } from 'src/app/models/instruction';
 import { Recipe } from 'src/app/models/recipe';
+import { IngredientAndInstructionValidator } from 'src/app/validators/ingredientAndInstructionValidator';
 
 @Component({
   selector: 'app-dashboard',
@@ -23,14 +24,18 @@ export class DashboardComponent implements OnInit {
 
   recipeForm: FormGroup = this.formbuilder.group({
     selectRecipe: ['', Validators.required],
-    name: ['', Validators.required],
-    timeToPrepare: ['', Validators.required],
-    ingredients: [''],
+    name: ['', [Validators.required, Validators.maxLength(40)]],
+    timeToPrepare: ['', [Validators.required, Validators.max(1440)]],
     privacy: ['public', Validators.required],
-    description: ['', Validators.required],
-    instructions: [''],
-    photo: ['', Validators.pattern("^https:\/\/images\.unsplash\.com\/.*")],
+    description: ['', [Validators.required, Validators.maxLength(500)]],
+    photo: ['', [Validators.maxLength(500), Validators.pattern("^https:\/\/images\.unsplash\.com\/.*")]],
   });
+
+  ingredientsForm = new FormControl('', [Validators.required, Validators.maxLength(100),
+  IngredientAndInstructionValidator(() => this.ingredients)]);
+
+  instructionsForm = new FormControl('', [Validators.required, Validators.maxLength(100),
+  IngredientAndInstructionValidator(() => this.instructions)]);
 
   constructor(private accountService: AccountService, private dashboardService: DashboardService,
     private router: Router, private recipeService: RecipeService, private formbuilder: FormBuilder) { }
@@ -110,13 +115,9 @@ export class DashboardComponent implements OnInit {
   }
 
   addIngredient() {
-    if (this.recipeForm.controls['ingredients'].value.trim() !== ""
-      && !this.ingredients.some(value => value.words == this.recipeForm.controls['ingredients'].value)
-    ) {
-      let newIngredient = new Ingredient(this.recipeForm.controls['ingredients'].value.trim());
-      this.ingredients.push(newIngredient);
-      this.recipeForm.controls['ingredients'].reset();
-    }
+    let newIngredient = new Ingredient(this.ingredientsForm.value!.trim());
+    this.ingredients.push(newIngredient);
+    this.ingredientsForm.reset();
   }
 
   removeIngredient(event: Event) {
@@ -127,13 +128,9 @@ export class DashboardComponent implements OnInit {
   }
 
   addInstruction() {
-    if (this.recipeForm.controls['instructions'].value.trim() !== ""
-      && !this.instructions.some(value => value.words == this.recipeForm.controls['instructions'].value)
-    ) {
-      let newInstruction = new Instruction(this.recipeForm.controls['instructions'].value.trim(), this.instructions.length);
-      this.instructions.push(newInstruction);
-      this.recipeForm.controls['instructions'].reset();
-    }
+    let newInstruction = new Instruction(this.instructionsForm.value!.trim(), this.instructions.length);
+    this.instructions.push(newInstruction);
+    this.instructionsForm.reset();
   }
 
   removeInstruction(event: Event) {
@@ -182,5 +179,4 @@ export class DashboardComponent implements OnInit {
       }
     });
   };
-
 }

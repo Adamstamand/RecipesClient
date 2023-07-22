@@ -6,10 +6,15 @@ export function CompareValidation(controlToValidate: string, controlToCompare: s
         const control = formGroup.controls[controlToValidate];
         const matchingControl = formGroup.controls[controlToCompare];
 
-        if (control.value != matchingControl.value) {
-            formGroup.get(controlToCompare)?.setErrors({ compareValidator: true });
-            return { compareValidator: true };
+        if (matchingControl.value !== "" &&
+            control.value !== "" &&
+            control.value !== matchingControl.value) {
+            formGroup.get(controlToCompare)?.setErrors({ noMatch: "The passwords don't match" });
+            return { noMatch: "The passwords don't match" };
         }
-        else return null;
+        else {
+            formGroup.get(controlToCompare)?.setErrors(null);
+            return null;
+        }
     };
 }

@@ -1,5 +1,5 @@
-import { Recipe } from "./recipe";
+import { Ingredient } from "./ingredient";
 
 export interface RecipeFunc {
-    (): Recipe[] | undefined;
+    (): Ingredient[] | undefined;
 }

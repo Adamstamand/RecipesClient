@@ -12,14 +12,14 @@ import { CompareValidation } from 'src/app/validators/passwordValidator';
 })
 export class LoginComponent {
   logInForm: FormGroup = this.formBuilder.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(8)]],
+    email: ['', [Validators.required, Validators.email, Validators.maxLength(254)]],
+    password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]],
   });
 
   registerForm: FormGroup = this.formBuilder.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(8)]],
-    confirmPassword: ['', [Validators.required, Validators.minLength(8)]],
+    email: ['', [Validators.required, Validators.email, Validators.maxLength(254)]],
+    password: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]],
+    confirmPassword: ['', [Validators.required, Validators.minLength(8), Validators.maxLength(30)]],
   }, {
     validators: [CompareValidation("password", "confirmPassword")]
   });
