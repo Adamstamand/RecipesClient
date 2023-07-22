@@ -19,11 +19,7 @@ export class RecipeFormComponent implements OnInit {
   constructor(private recipeFormService: RecipeFormService) { }
 
   ngOnInit() {
-    this.recipeFormService.recipeForm.reset();
-    this.recipeFormService.ingredientsForm.reset();
-    this.recipeFormService.instructionsForm.reset();
-    this.recipeFormService.ingredients.length = 0;
-    this.recipeFormService.instructions.length = 0;
+    this.recipeFormService.resetAllValues();
   }
 
   addIngredient() {

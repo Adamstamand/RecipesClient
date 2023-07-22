@@ -1,6 +1,6 @@
-<div *ngIf="isLoggedIn">
+<ng-container *ngIf="isLoggedIn">
     <h1 class="text-primary-emphasis">Add a New Recipe!</h1>
     <app-recipe-form></app-recipe-form>
     <button class="btn btn-success" type="button" (click)="submitRecipe()" [disabled]="!recipeForm.valid ||
     instructions.length < 1 || ingredients.length < 1">Submit</button>
-</div>
+</ng-container>

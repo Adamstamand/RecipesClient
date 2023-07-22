@@ -26,4 +26,12 @@ export class RecipeFormService {
   IngredientAndInstructionValidator(() => this.instructions)]);
 
   constructor(private formbuilder: FormBuilder) { }
+
+  resetAllValues() {
+    this.recipeForm.reset();
+    this.ingredientsForm.reset();
+    this.instructionsForm.reset();
+    this.ingredients.length = 0;
+    this.instructions.length = 0;
+  }
 }

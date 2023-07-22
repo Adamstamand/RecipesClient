@@ -54,6 +54,7 @@ export class DashboardComponent implements OnInit {
 
     this.selectRecipe.valueChanges.subscribe({
       next: () => {
+        this.recipeFormService.resetAllValues();
         if (this.selectRecipe.value !== '') {
           let selectedRecipe = this.findRecipeFromSelectValue()!;
           this.recipeForm.patchValue({
@@ -63,15 +64,13 @@ export class DashboardComponent implements OnInit {
             description: selectedRecipe.description,
             photo: selectedRecipe.photo
           });
-          this.ingredients.length = 0;
-          this.instructions.length = 0;
           for (let ingredient of selectedRecipe.ingredients) {
             this.ingredients.push(ingredient);
           }
           for (let instruction of selectedRecipe.instructions) {
             this.instructions.push(instruction);
           }
-        } else { this.recipeForm.reset(); }
+        }
       }
     }
     );
