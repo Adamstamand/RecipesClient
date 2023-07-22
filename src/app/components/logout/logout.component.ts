@@ -18,6 +18,7 @@ export class LogoutComponent {
       error: err => console.error(err)
     });
     this.accountService.isLoggedIn = false;
+    this.accountService.accountName = "";
     this.router.navigate(['']);
   }
 }

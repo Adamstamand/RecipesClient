@@ -8,9 +8,11 @@ import { AccountService } from 'src/app/services/account.service';
 })
 export class NavbarComponent implements OnInit {
 
+
   constructor(public accountService: AccountService) { }
 
   ngOnInit() {
     this.accountService.isLoggedIn;
+    this.accountService.accountName;
   }
 }

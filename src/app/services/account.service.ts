@@ -11,6 +11,7 @@ import { AuthenticationResponse } from '../models/authenticationResponse';
 export class AccountService {
   baseApiUrl: string = "https://localhost:7041/api";
   public isLoggedIn: boolean = false;
+  public accountName?: string;
 
   constructor(private httpClient: HttpClient) { }
 
@@ -41,6 +42,7 @@ export class AccountService {
       this.postNewToken().subscribe({
         next: (newToken: AuthenticationResponse) => {
           this.isLoggedIn = true;
+          this.accountName = newToken.userName;
           localStorage["token"] = newToken.token;
           localStorage["refreshToken"] = newToken.refreshToken;
         },

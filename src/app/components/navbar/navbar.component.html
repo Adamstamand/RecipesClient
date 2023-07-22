@@ -4,6 +4,7 @@
         <a routerLink="add-recipe" routerLinkActive="active-link">Add Recipe</a>
         <a routerLink="dashboard" routerLinkActive="active-link">Dashboard</a>
         <a *ngIf="!accountService.isLoggedIn" routerLink="log-in" routerLinkActive="active-link">Log In / Register</a>
+        <div *ngIf="accountService.isLoggedIn">Signed In As: {{accountService.accountName}}</div>
         <app-logout *ngIf="accountService.isLoggedIn"></app-logout>
     </nav>
 </div>

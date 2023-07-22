@@ -7,7 +7,7 @@ import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms'
 import { Ingredient } from 'src/app/models/ingredient';
 import { Instruction } from 'src/app/models/instruction';
 import { Recipe } from 'src/app/models/recipe';
-import { IngredientAndInstructionValidator } from 'src/app/validators/ingredientAndInstructionValidator';
+import { RecipeFormService } from 'src/app/services/recipe-form.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,28 +17,16 @@ import { IngredientAndInstructionValidator } from 'src/app/validators/ingredient
 export class DashboardComponent implements OnInit {
   dashboardRecipes?: Recipe[];
   isLoggedIn: boolean = false;
-  ingredients: Ingredient[] = [];
-  instructions: Instruction[] = [];
+  recipeForm: FormGroup = this.recipeFormService.recipeForm;
+  ingredients: Ingredient[] = this.recipeFormService.ingredients;
+  instructions: Instruction[] = this.recipeFormService.instructions;
+
+  selectRecipe: FormControl = new FormControl('', Validators.required);
 
   deleteThis = new FormControl('', Validators.required);
 
-  recipeForm: FormGroup = this.formbuilder.group({
-    selectRecipe: ['', Validators.required],
-    name: ['', [Validators.required, Validators.maxLength(40)]],
-    timeToPrepare: ['', [Validators.required, Validators.max(1440)]],
-    privacy: ['public', Validators.required],
-    description: ['', [Validators.required, Validators.maxLength(500)]],
-    photo: ['', [Validators.maxLength(500), Validators.pattern("^https:\/\/images\.unsplash\.com\/.*")]],
-  });
-
-  ingredientsForm = new FormControl('', [Validators.required, Validators.maxLength(100),
-  IngredientAndInstructionValidator(() => this.ingredients)]);
-
-  instructionsForm = new FormControl('', [Validators.required, Validators.maxLength(100),
-  IngredientAndInstructionValidator(() => this.instructions)]);
-
   constructor(private accountService: AccountService, private dashboardService: DashboardService,
-    private router: Router, private recipeService: RecipeService, private formbuilder: FormBuilder) { }
+    private router: Router, private recipeService: RecipeService, private recipeFormService: RecipeFormService) { }
 
   ngOnInit() {
     this.accountService.postNewToken().subscribe({
@@ -46,6 +34,7 @@ export class DashboardComponent implements OnInit {
         localStorage["token"] = newToken.token;
         localStorage["refreshToken"] = newToken.refreshToken;
         this.accountService.isLoggedIn = true;
+        this.accountService.accountName = newToken.userName;
         this.isLoggedIn = true;
         this.dashboardService.getDashboard().subscribe({
           next: (dashboardRecipes: Recipe[]) => {
@@ -63,24 +52,26 @@ export class DashboardComponent implements OnInit {
       }
     });
 
-    this.recipeForm.get('selectRecipe')!.valueChanges.subscribe({
+    this.selectRecipe.valueChanges.subscribe({
       next: () => {
-        let selectedRecipe = this.findRecipeFromSelectValue()![0];
-        this.recipeForm.patchValue({
-          name: selectedRecipe.name,
-          timeToPrepare: selectedRecipe.timeToPrepare,
-          privacy: selectedRecipe.privacy,
-          description: selectedRecipe.description,
-          photo: selectedRecipe.photo
-        });
-        this.ingredients = [];
-        this.instructions = [];
-        for (let ingredient of selectedRecipe.ingredients) {
-          this.ingredients.push(ingredient);
-        }
-        for (let instruction of selectedRecipe.instructions) {
-          this.instructions.push(instruction);
-        }
+        if (this.selectRecipe.value !== '') {
+          let selectedRecipe = this.findRecipeFromSelectValue()!;
+          this.recipeForm.patchValue({
+            name: selectedRecipe.name,
+            timeToPrepare: selectedRecipe.timeToPrepare,
+            privacy: selectedRecipe.privacy,
+            description: selectedRecipe.description,
+            photo: selectedRecipe.photo
+          });
+          this.ingredients.length = 0;
+          this.instructions.length = 0;
+          for (let ingredient of selectedRecipe.ingredients) {
+            this.ingredients.push(ingredient);
+          }
+          for (let instruction of selectedRecipe.instructions) {
+            this.instructions.push(instruction);
+          }
+        } else { this.recipeForm.reset(); }
       }
     }
     );
@@ -114,45 +105,8 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  addIngredient() {
-    let newIngredient = new Ingredient(this.ingredientsForm.value!.trim());
-    this.ingredients.push(newIngredient);
-    this.ingredientsForm.reset();
-  }
-
-  removeIngredient(event: Event) {
-    let eventValue: string = (event.target as HTMLInputElement).value;
-    let indexToRemove = this.ingredients.findIndex(ingredient => ingredient.words == eventValue);
-    this.ingredients.splice(indexToRemove, 1);
-    console.log(this.ingredients);
-  }
-
-  addInstruction() {
-    let newInstruction = new Instruction(this.instructionsForm.value!.trim(), this.instructions.length);
-    this.instructions.push(newInstruction);
-    this.instructionsForm.reset();
-  }
-
-  removeInstruction(event: Event) {
-    let eventValue: string = (event.target as HTMLInputElement).value;
-    let indexToRemove = this.instructions.findIndex(instruction => instruction.words == eventValue);
-    this.instructions.splice(indexToRemove, 1);
-    for (let i = 0; i < this.instructions.length; i++) {
-      this.instructions[i].position = i;
-    }
-  }
-
-  findRecipeFromSelectValue() {
-    if (this.recipeForm.get("selectRecipe")!.value != undefined && this.dashboardRecipes != undefined) {
-      let selectedRecipe = this.dashboardRecipes
-        .filter(recipe => recipe.name == this.recipeForm.get("selectRecipe")!.value);
-      return selectedRecipe;
-    }
-    return null;
-  }
-
   submitRecipeEdit() {
-    let recipeToEditId = this.findRecipeFromSelectValue()![0].id!;
+    let recipeToEditId = this.findRecipeFromSelectValue()!.id!;
     let editRecipe: Recipe = {
       id: recipeToEditId,
       name: this.recipeForm.get('name')?.value.trim(),
@@ -178,5 +132,23 @@ export class DashboardComponent implements OnInit {
         this.accountService.isLoggedIn = false;
       }
     });
-  };
+  }
+
+  private findRecipeFromSelectValue() {
+    if (this.selectRecipe.value !== '' && this.dashboardRecipes !== undefined) {
+      let selectedRecipe = this.dashboardRecipes
+        .filter(recipe => recipe.name == this.selectRecipe.value);
+      return selectedRecipe[0];
+    }
+    return null;
+  }
+
+  private findRecipeFromDeleteValue() {
+    if (this.deleteThis.value !== '' && this.dashboardRecipes !== undefined) {
+      let selectedRecipe = this.dashboardRecipes
+        .filter(recipe => recipe.name == this.deleteThis.value);
+      return selectedRecipe[0];
+    }
+    return null;
+  }
 }
