@@ -52,8 +52,7 @@
                 [formControl]="ingredientsForm">
             <div *ngIf="ingredientsForm.hasError('maxlength')" class="form-text">100 characters max</div>
             <div *ngIf="ingredientsForm.hasError('duplicate')" class="form-text">Duplicate values aren't
-                allowed
-            </div>
+                allowed</div>
         </div>
         <div class="margin-bottom">
             <button class="btn btn-warning" type="button" (click)="addIngredient()"

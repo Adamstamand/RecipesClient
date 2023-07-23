@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
-
 import { Recipe } from '../models/recipe';
 
 @Injectable({
@@ -32,7 +30,7 @@ export class RecipeService {
     return this.httpClient.get<Recipe>(`${this.recipeUrl}/${id}`, httpOptions);
   };
 
-  postRecipe(recipe: Recipe): Observable<Recipe> {
+  postRecipe(recipe: Recipe) {
     let httpOptions = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',

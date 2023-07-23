@@ -9,7 +9,7 @@ import { AuthenticationResponse } from '../models/authenticationResponse';
   providedIn: 'root'
 })
 export class AccountService {
-  baseApiUrl: string = "https://localhost:7041/api";
+  private baseApiUrl: string = "https://localhost:7041/api";
   public isLoggedIn: boolean = false;
   public accountName?: string;
 

@@ -3,7 +3,7 @@ import { AccountService } from 'src/app/services/account.service';
 import { DashboardService } from 'src/app/services/dashboard.service';
 import { Router } from '@angular/router';
 import { RecipeService } from 'src/app/services/recipe.service';
-import { FormControl, Validators, FormGroup, FormBuilder } from '@angular/forms';
+import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { Ingredient } from 'src/app/models/ingredient';
 import { Instruction } from 'src/app/models/instruction';
 import { Recipe } from 'src/app/models/recipe';
@@ -23,7 +23,7 @@ export class DashboardComponent implements OnInit {
 
   selectRecipe: FormControl = new FormControl('', Validators.required);
 
-  deleteThis = new FormControl('', Validators.required);
+  deleteThis: FormControl = new FormControl('', Validators.required);
 
   constructor(private accountService: AccountService, private dashboardService: DashboardService,
     private router: Router, private recipeService: RecipeService, private recipeFormService: RecipeFormService) { }
@@ -56,7 +56,7 @@ export class DashboardComponent implements OnInit {
       next: () => {
         this.recipeFormService.resetAllValues();
         if (this.selectRecipe.value !== '') {
-          let selectedRecipe = this.findRecipeFromSelectValue()!;
+          let selectedRecipe = this.findRecipeFromSelectValue(this.selectRecipe.value)!;
           this.recipeForm.patchValue({
             name: selectedRecipe.name,
             timeToPrepare: selectedRecipe.timeToPrepare,
@@ -77,35 +77,31 @@ export class DashboardComponent implements OnInit {
   }
 
   deleteRecipe() {
-    let id: number;
-    if (this.deleteThis.value != null) {
-      let deleteValue = this.dashboardRecipes?.filter(recipe => recipe.name.toLowerCase() == this.deleteThis.value?.toLowerCase());
-      if (deleteValue) {
-        id = deleteValue[0].id!;
-        this.accountService.postNewToken().subscribe({
-          next: newToken => {
-            localStorage["token"] = newToken.token;
-            localStorage["refreshToken"] = newToken.refreshToken;
-            this.recipeService.deleteRecipe(id).subscribe({
-              next: () => {
-                let indexToSplice = this.dashboardRecipes!.findIndex(recipe => recipe.id == id);
-                this.dashboardRecipes?.splice(indexToSplice, 1);
-              },
-              error: err => console.error(err)
-            });
+    let deleteValue = this.findRecipeFromSelectValue(this.deleteThis.value);
+    let id = deleteValue!.id!;
+    this.accountService.postNewToken().subscribe({
+      next: newToken => {
+        localStorage["token"] = newToken.token;
+        localStorage["refreshToken"] = newToken.refreshToken;
+        this.recipeService.deleteRecipe(id).subscribe({
+          next: () => {
+            let indexToSplice = this.dashboardRecipes!.findIndex(recipe => recipe.id == id);
+            this.dashboardRecipes?.splice(indexToSplice, 1);
+            this.deleteThis.reset();
           },
-          error: err => {
-            console.error(err);
-            this.router.navigate(['log-in']);
-            this.accountService.isLoggedIn = false;
-          }
+          error: err => console.error(err)
         });
+      },
+      error: err => {
+        console.error(err);
+        this.router.navigate(['log-in']);
+        this.accountService.isLoggedIn = false;
       }
-    }
+    });
   }
 
   submitRecipeEdit() {
-    let recipeToEditId = this.findRecipeFromSelectValue()!.id!;
+    let recipeToEditId = this.findRecipeFromSelectValue(this.selectRecipe.value)!.id!;
     let editRecipe: Recipe = {
       id: recipeToEditId,
       name: this.recipeForm.get('name')?.value.trim(),
@@ -133,19 +129,10 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  private findRecipeFromSelectValue() {
-    if (this.selectRecipe.value !== '' && this.dashboardRecipes !== undefined) {
+  private findRecipeFromSelectValue(selectValue: string) {
+    if (selectValue !== '' && this.dashboardRecipes !== undefined) {
       let selectedRecipe = this.dashboardRecipes
-        .filter(recipe => recipe.name == this.selectRecipe.value);
-      return selectedRecipe[0];
-    }
-    return null;
-  }
-
-  private findRecipeFromDeleteValue() {
-    if (this.deleteThis.value !== '' && this.dashboardRecipes !== undefined) {
-      let selectedRecipe = this.dashboardRecipes
-        .filter(recipe => recipe.name == this.deleteThis.value);
+        .filter(recipe => recipe.name == selectValue);
       return selectedRecipe[0];
     }
     return null;

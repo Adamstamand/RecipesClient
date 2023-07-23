@@ -45,6 +45,7 @@ export class LoginComponent {
         localStorage["token"] = response.token;
         localStorage["refreshToken"] = response.refreshToken;
         this.accountService.isLoggedIn = true;
+        this.accountService.accountName = response.userName;
         this.router.navigate(['/add-recipe']);
       },
       error: err => console.error(err)

@@ -15,16 +15,3 @@ body {
     margin-bottom: 10px;
     width: fit-content;
 }
-
-.add-to-recipe {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    width: fit-content;
-    margin-bottom: 5px;
-}
-
-.add-to-recipe-container {
-    margin-top: 10px;
-    margin-bottom: 10px;
-}

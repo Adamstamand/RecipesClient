@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-
 import { RecipeService } from '../../services/recipe.service';
 import { AccountService } from 'src/app/services/account.service';
 import { Recipe } from 'src/app/models/recipe';
@@ -11,11 +10,11 @@ import { Recipe } from 'src/app/models/recipe';
 })
 export class RecipesComponent implements OnInit {
   recipes?: Recipe[];
+
   constructor(private recipeService: RecipeService, private accountService: AccountService) { }
 
   ngOnInit() {
     this.getRecipes();
-
     this.accountService.refreshTokenOnlyIfTokenCurrentlyExists();
   }
 
