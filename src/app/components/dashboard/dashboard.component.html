@@ -35,7 +35,7 @@
                     <option *ngFor="let recipe of dashboardRecipes" value="{{recipe.name}}">{{recipe.name}}</option>
                 </select>
             </div>
-            <app-recipe-form [hidden]="selectRecipe.value === ''"></app-recipe-form>
+            <app-recipe-form [hidden]="selectRecipe.value === '' || selectRecipe.value === null"></app-recipe-form>
             <button class="btn btn-success" type="button" (click)="submitRecipeEdit()" [disabled]="!recipeForm.valid || 
             instructions.length < 1 || ingredients.length < 1">Update</button>
         </div>

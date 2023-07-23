@@ -55,7 +55,7 @@ export class DashboardComponent implements OnInit {
     this.selectRecipe.valueChanges.subscribe({
       next: () => {
         this.recipeFormService.resetAllValues();
-        if (this.selectRecipe.value !== '') {
+        if (this.selectRecipe.value !== '' && this.selectRecipe.value !== null) {
           let selectedRecipe = this.findRecipeFromSelectValue(this.selectRecipe.value)!;
           this.recipeForm.patchValue({
             name: selectedRecipe.name,
@@ -86,6 +86,9 @@ export class DashboardComponent implements OnInit {
         this.recipeService.deleteRecipe(id).subscribe({
           next: () => {
             let indexToSplice = this.dashboardRecipes!.findIndex(recipe => recipe.id == id);
+            if (deleteValue!.name === this.selectRecipe.value) {
+              this.selectRecipe.reset();
+            }
             this.dashboardRecipes?.splice(indexToSplice, 1);
             this.deleteThis.reset();
           },
