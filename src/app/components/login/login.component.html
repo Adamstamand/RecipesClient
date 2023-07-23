@@ -3,7 +3,7 @@
     <form [formGroup]="logInForm" (ngSubmit)="submitLogIn()">
         <div class="input-container">
             <label for="log-in-email">Email:</label>
-            <input class="form-control border-primary" type="text" id="log-in-email" formControlName="email">
+            <input class="form-control border-primary" type="email" id="log-in-email" formControlName="email">
         </div>
         <div class="input-container">
             <label for="log-in-password">Password:</label>
@@ -18,7 +18,7 @@
     <form [formGroup]="registerForm" (ngSubmit)="submitRegister()">
         <div class="input-container">
             <label for="register-email">Email:</label>
-            <input class="form-control border-primary" type="text" id="register-email" formControlName="email">
+            <input class="form-control border-primary" type="email" id="register-email" formControlName="email">
         </div>
         <div class="input-container">
             <label for="register-password">Password:</label>

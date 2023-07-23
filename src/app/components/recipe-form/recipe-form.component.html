@@ -59,12 +59,19 @@
                 [disabled]="!ingredientsForm.valid">Add
                 Ingredient</button>
         </div>
-        <ul>
-            <li *ngFor="let ingredient of ingredients">{{ingredient.words}}
-                <span><button class="btn btn-outline-danger btn-sm" type="button" [value]="ingredient.words"
-                        (click)="removeIngredient($event)">X</button></span>
-            </li>
-        </ul>
+        <div class="add-to-recipe-list" cdkDropList (cdkDropListDropped)="dropIngredient($event)"
+            [hidden]="ingredients.length < 1">
+            <div class="recipe-list-box" *ngFor="let ingredient of ingredients" cdkDrag
+                cdkDragBoundary=".add-to-recipe-list">
+                <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 320 512">
+                    <path
+                        d="M182.6 9.4c-12.5-12.5-32.8-12.5-45.3 0l-96 96c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L128 109.3V402.7L86.6 361.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l96 96c12.5 12.5 32.8 12.5 45.3 0l96-96c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 402.7V109.3l41.4 41.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-96-96z" />
+                </svg>
+                {{ingredient.words}}
+                <button class="btn btn-outline-danger btn-sm" type="button" [value]="ingredient.words"
+                    (click)="removeIngredient($event)">X</button>
+            </div>
+        </div>
     </section>
 
     <section class="add-to-recipe-container">
@@ -81,11 +88,18 @@
             <button class="btn btn-warning" type="button" (click)="addInstruction()"
                 [disabled]="!instructionsForm.valid">Add Instruction</button>
         </div>
-        <ol class="add-recipe-lists">
-            <li *ngFor="let instruction of instructions">{{instruction.words}}
-                <span><button class="btn btn-outline-danger btn-sm" type="button" [value]="instruction.words"
-                        (click)="removeInstruction($event)">X</button></span>
-            </li>
-        </ol>
+        <div class="add-to-recipe-list" cdkDropList (cdkDropListDropped)="dropInstruction($event)"
+            [hidden]="instructions.length < 1">
+            <div class="recipe-list-box" *ngFor="let instruction of instructions" cdkDrag
+                cdkDragBoundary=".add-to-recipe-list">
+                <svg xmlns="http://www.w3.org/2000/svg" height="1.5em" viewBox="0 0 320 512">
+                    <path
+                        d="M182.6 9.4c-12.5-12.5-32.8-12.5-45.3 0l-96 96c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L128 109.3V402.7L86.6 361.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l96 96c12.5 12.5 32.8 12.5 45.3 0l96-96c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 402.7V109.3l41.4 41.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-96-96z" />
+                </svg>
+                {{instruction.words}}
+                <button class="btn btn-outline-danger btn-sm" type="button" [value]="instruction.words"
+                    (click)="removeInstruction($event)">X</button>
+            </div>
+        </div>
     </section>
 </form>

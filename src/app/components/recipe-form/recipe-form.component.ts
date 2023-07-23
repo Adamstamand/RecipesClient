@@ -3,6 +3,7 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { Ingredient } from 'src/app/models/ingredient';
 import { Instruction } from 'src/app/models/instruction';
 import { RecipeFormService } from 'src/app/services/recipe-form.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-recipe-form',
@@ -22,9 +23,23 @@ export class RecipeFormComponent implements OnInit {
     this.recipeFormService.resetAllValues();
   }
 
+  dropInstruction(event: CdkDragDrop<Instruction[]>) {
+    moveItemInArray(this.instructions, event.previousIndex, event.currentIndex);
+    for (let i = 0; i < this.instructions.length; i++) {
+      this.instructions[i].position = i;
+    }
+  }
+
+  dropIngredient(event: CdkDragDrop<Ingredient[]>) {
+    moveItemInArray(this.ingredients, event.previousIndex, event.currentIndex);
+    for (let i = 0; i < this.ingredients.length; i++) {
+      this.ingredients[i].position = i;
+    }
+  }
+
   addIngredient() {
     if (this.ingredientsForm.valid) {
-      let newIngredient = new Ingredient(this.ingredientsForm.value!.trim());
+      let newIngredient = new Ingredient(this.ingredientsForm.value!.trim(), this.ingredients.length);
       this.ingredients.push(newIngredient);
       this.ingredientsForm.reset();
     }
@@ -34,6 +49,9 @@ export class RecipeFormComponent implements OnInit {
     let eventValue: string = (event.target as HTMLInputElement).value;
     let indexToRemove = this.ingredients.findIndex(ingredient => ingredient.words == eventValue);
     this.ingredients.splice(indexToRemove, 1);
+    for (let i = 0; i < this.ingredients.length; i++) {
+      this.ingredients[i].position = i;
+    }
   }
 
   addInstruction() {
