@@ -21,7 +21,7 @@
             <label for="description">Description*: </label>
             <textarea class="form-control border-primary" id="description" type="text"
                 formControlName="description"></textarea>
-            <div *ngIf="recipeForm.get('description')?.hasError('maxlength')" class="form-text">500
+            <div *ngIf="recipeForm.get('description')?.hasError('maxlength')" class="form-text">1000
                 characters max
             </div>
         </div>
@@ -50,7 +50,7 @@
             <label for="ingredients">Add Ingredient*: </label>
             <input (keyup.enter)="addIngredient()" class="form-control border-primary" id="ingredients" type="text"
                 [formControl]="ingredientsForm">
-            <div *ngIf="ingredientsForm.hasError('maxlength')" class="form-text">100 characters max</div>
+            <div *ngIf="ingredientsForm.hasError('maxlength')" class="form-text">500 characters max</div>
             <div *ngIf="ingredientsForm.hasError('duplicate')" class="form-text">Duplicate values aren't
                 allowed</div>
         </div>
@@ -79,7 +79,7 @@
             <label for="instructions">Add Instruction*: </label>
             <input (keyup.enter)="addInstruction()" class="form-control border-primary" id="instructions" type="text"
                 [formControl]="instructionsForm">
-            <div *ngIf="instructionsForm.hasError('maxlength')" class="form-text">100 characters max</div>
+            <div *ngIf="instructionsForm.hasError('maxlength')" class="form-text">500 characters max</div>
             <div *ngIf="instructionsForm.hasError('duplicate')" class="form-text">Duplicate values aren't
                 allowed
             </div>
@@ -96,6 +96,7 @@
                     <path
                         d="M182.6 9.4c-12.5-12.5-32.8-12.5-45.3 0l-96 96c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L128 109.3V402.7L86.6 361.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l96 96c12.5 12.5 32.8 12.5 45.3 0l96-96c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 402.7V109.3l41.4 41.4c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-96-96z" />
                 </svg>
+                {{instruction.position+1}}.
                 {{instruction.words}}
                 <button class="btn btn-outline-danger btn-sm" type="button" [value]="instruction.words"
                     (click)="removeInstruction($event)">X</button>

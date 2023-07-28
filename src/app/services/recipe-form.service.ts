@@ -15,14 +15,14 @@ export class RecipeFormService {
     name: ['', [Validators.required, Validators.maxLength(40)]],
     timeToPrepare: ['', [Validators.required, Validators.max(1440), Validators.min(0)]],
     privacy: ['public', { nonNullable: true, validators: Validators.required }],
-    description: ['', [Validators.required, Validators.maxLength(500)]],
+    description: ['', [Validators.required, Validators.maxLength(1000)]],
     photo: ['', [Validators.maxLength(500), Validators.pattern("^https:\/\/images\.unsplash\.com\/.*")]],
   });
 
-  ingredientsForm = new FormControl('', [Validators.required, Validators.maxLength(100),
+  ingredientsForm = new FormControl('', [Validators.required, Validators.maxLength(500),
   IngredientAndInstructionValidator(() => this.ingredients)]);
 
-  instructionsForm = new FormControl('', [Validators.required, Validators.maxLength(100),
+  instructionsForm = new FormControl('', [Validators.required, Validators.maxLength(500),
   IngredientAndInstructionValidator(() => this.instructions)]);
 
   constructor(private formbuilder: FormBuilder) { }

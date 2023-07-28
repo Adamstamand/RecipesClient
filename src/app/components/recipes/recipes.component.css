@@ -12,6 +12,7 @@
 }
 
 .food-image {
-    max-height: 70%;
+    max-height: 30vh;
     max-width: 90%;
+    object-fit: contain;
 }

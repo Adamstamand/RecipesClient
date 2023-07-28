@@ -64,10 +64,12 @@ export class DashboardComponent implements OnInit {
             description: selectedRecipe.description,
             photo: selectedRecipe.photo
           });
-          for (let ingredient of selectedRecipe.ingredients) {
+          let sortedIngredients = selectedRecipe.ingredients.sort((a, b) => a.position - b.position);
+          for (let ingredient of sortedIngredients) {
             this.ingredients.push(ingredient);
           }
-          for (let instruction of selectedRecipe.instructions) {
+          let sortedInstructions = selectedRecipe.instructions.sort((a, b) => a.position - b.position);
+          for (let instruction of sortedInstructions) {
             this.instructions.push(instruction);
           }
         }
