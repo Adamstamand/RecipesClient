@@ -4,12 +4,13 @@ import { RegisterUser } from '../models/registerUser';
 import { LogIn } from '../models/login';
 import { RefreshToken } from '../models/refreshToken';
 import { AuthenticationResponse } from '../models/authenticationResponse';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AccountService {
-  private baseApiUrl: string = "https://localhost:7041/api";
+  private baseApiUrl: string = environment.apiUrl;
   public isLoggedIn: boolean = false;
   public accountName?: string;
 

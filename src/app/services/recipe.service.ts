@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Recipe } from '../models/recipe';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecipeService {
-  private recipeUrl = 'https://localhost:7041/api/recipe';
+  private recipeUrl = `${environment.apiUrl}/recipe`;
 
   constructor(private httpClient: HttpClient) { }
 

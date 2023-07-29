@@ -2,12 +2,13 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
 import { Recipe } from '../models/recipe';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DashboardService {
-  private dashboardApi = "https://localhost:7041/api/dashboard";
+  private dashboardApi = `${environment.apiUrl}/dashboard`;
 
   constructor(private httpClient: HttpClient) { }
 
