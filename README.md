@@ -1,6 +1,6 @@
 # Recipe App
 
-This project is a web app where users can view and create new recipes. Each recipe has its own specific page that is generated when a user makes a new recipe.
+This project is an Angular web app where users can view and create new recipes. Each recipe has its own specific page that is generated when a user makes a new recipe.
 
 ## Home Page
 
