@@ -10,6 +10,8 @@ import { Recipe } from 'src/app/models/recipe';
 })
 export class RecipesComponent implements OnInit {
   recipes?: Recipe[];
+  isLoading: boolean = true;
+  loadingArray = new Array(10);
 
   constructor(private recipeService: RecipeService, private accountService: AccountService) { }
 
@@ -21,6 +23,7 @@ export class RecipesComponent implements OnInit {
   getRecipes() {
     this.recipeService.getAllRecipes().subscribe({
       next: recipes => {
+        this.isLoading = false;
         this.recipes = recipes;
       },
       error: err => console.log(err)

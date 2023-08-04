@@ -1,4 +1,10 @@
-<section class="recipes-container">
+<div *ngIf="isLoading" class="recipes-container">
+    <div class="loading-container rounded" *ngFor="let item of loadingArray">
+        <h2 class="text-primary">Loading...</h2>
+        <div class="spinner-border spinner-size"></div>
+    </div>
+</div>
+<section class="recipes-container" *ngIf="!isLoading">
     <div class="recipe-container rounded" *ngFor="let recipe of recipes">
         <a [routerLink]="['/recipe/', recipe.id]">
             <h2>{{recipe.name}}</h2>
